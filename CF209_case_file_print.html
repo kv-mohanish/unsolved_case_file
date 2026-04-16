@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CF-209 — The Night That Never Ended</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+
+/* ── Reset & variables ── */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cf-ink:#2C2C2A;
+  --cf-paper:#F7F5EE;
+  --cf-muted:#888780;
+  --cf-border:#C8C6BB;
+  --cf-red:#993C1D;
+  --cf-red-bg:#FAECE7;
+  --cf-red-deep:#4A1B0C;
+  --cf-amber:#854F0B;
+  --cf-amber-bg:#FAEEDA;
+  --cf-green:#3B6D11;
+  --cf-green-bg:#EAF3DE;
+  --cf-blue:#185FA5;
+  --cf-blue-bg:#E6F1FB;
+}
+
+/* ── Screen wrapper ── */
+body{background:#E8E6DF;font-family:'Courier Prime',monospace;color:var(--cf-ink)}
+
+/* ── A4 page simulation ── */
+.page{
+  width:210mm;
+  min-height:297mm;
+  background:var(--cf-paper);
+  margin:12mm auto;
+  padding:18mm 18mm 16mm;
+  box-shadow:0 4px 24px rgba(0,0,0,.18);
+  page-break-after:always;
+  position:relative;
+}
+.page:last-child{page-break-after:auto}
+
+/* ── Print styles ── */
+@media print{
+  body{background:none}
+  .page{
+    margin:0;
+    box-shadow:none;
+    padding:14mm 16mm 13mm;
+    width:210mm;
+    min-height:297mm;
+    page-break-after:always;
+  }
+  .no-print{display:none!important}
+}
+
+/* ── Typography ── */
+.pg-num{font-size:10px;color:var(--cf-muted);text-align:right;margin-bottom:.4rem;letter-spacing:.08em;font-family:'Courier Prime',monospace}
+.body{font-size:12.5px;line-height:1.85;color:var(--cf-ink)}
+.italic{font-style:italic;color:var(--cf-muted)}
+
+/* ── Section label ── */
+.sl{font-size:10px;letter-spacing:.15em;color:var(--cf-muted);text-transform:uppercase;border-bottom:.5px solid var(--cf-border);padding-bottom:4px;margin:1rem 0 .55rem;font-family:'Courier Prime',monospace}
+
+/* ── Stamps ── */
+.stamp{display:inline-flex;align-items:center;border:2.5px solid var(--cf-red);color:var(--cf-red);font-family:'Special Elite',serif;font-size:11px;letter-spacing:.18em;padding:3px 11px 4px;transform:rotate(-2.2deg);margin-bottom:.9rem;opacity:.82;text-transform:uppercase}
+.stamp.blue{border-color:var(--cf-blue);color:var(--cf-blue);transform:rotate(1.3deg)}
+.stamp.green{border-color:var(--cf-green);color:var(--cf-green);transform:rotate(-1deg)}
+
+/* ── Classified bar ── */
+.classified-bar{background:var(--cf-red);color:#FAECE7;font-family:'Special Elite',serif;font-size:10px;letter-spacing:.2em;text-align:center;padding:4px 0;margin-bottom:1rem;border-radius:2px}
+
+/* ── Header box ── */
+.header-box{border:.5px solid var(--cf-border);border-radius:4px;padding:1rem 1.25rem;margin-bottom:1.1rem;background:#FDFCF7}
+.case-id{font-family:'Special Elite',serif;font-size:20px;letter-spacing:.1em}
+.case-sub{font-family:'Special Elite',serif;font-size:13px;color:var(--cf-muted);margin-top:2px;letter-spacing:.05em}
+.meta-row{display:flex;flex-wrap:wrap;gap:1rem;margin-top:.65rem}
+.meta{font-size:11px;color:var(--cf-muted)}.meta strong{display:block;font-size:12px;font-weight:700;color:var(--cf-ink);margin-bottom:1px}
+
+/* ── Rows / bullets ── */
+.row{display:flex;gap:9px;align-items:flex-start;padding:6px 0;border-bottom:.5px solid var(--cf-border);font-size:12.5px}
+.row:last-child{border-bottom:none}
+.dot{width:7px;height:7px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.d-red{background:#993C1D}.d-amber{background:#BA7517}.d-green{background:#3B6D11}
+
+/* ── Epigraph ── */
+.epigraph{font-family:'Special Elite',serif;font-size:13.5px;color:var(--cf-muted);border-left:3px solid var(--cf-border);padding-left:.9rem;margin:1rem 0;font-style:italic}
+
+/* ── Table ── */
+.tbl{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:.4rem}
+.tbl th{text-align:left;padding:5px 8px;font-size:10px;letter-spacing:.09em;color:var(--cf-muted);border-bottom:.5px solid var(--cf-border);font-weight:500}
+.tbl td{padding:7px 8px;border-bottom:.5px solid var(--cf-border);vertical-align:top;color:var(--cf-ink)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl .crit td{background:var(--cf-red-bg);color:var(--cf-red-deep)}
+
+/* ── Badges ── */
+.badge{display:inline-block;font-size:9.5px;padding:2px 6px;border-radius:2px;letter-spacing:.04em}
+.b-red{background:var(--cf-red-bg);color:var(--cf-red)}.b-amber{background:var(--cf-amber-bg);color:var(--cf-amber)}.b-green{background:var(--cf-green-bg);color:var(--cf-green)}.b-blue{background:var(--cf-blue-bg);color:var(--cf-blue)}
+
+/* ── Suspect grid ── */
+.s-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:.5rem}
+.s-card{border:.5px solid var(--cf-border);border-radius:4px;padding:.6rem .5rem;background:#FDFCF7;text-align:center}
+.initials{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;margin:0 auto 6px}
+.s-name{font-size:12px;font-weight:500;color:var(--cf-ink)}.s-role{font-size:10px;color:var(--cf-muted);margin-top:1px}
+.s-status{font-size:9.5px;margin-top:4px;padding:2px 7px;border-radius:2px;display:inline-block;letter-spacing:.03em}
+
+/* ── Chat log ── */
+.chat{background:#F2EFE8;border:.5px solid var(--cf-border);border-radius:4px;padding:.6rem .9rem;font-family:'Courier Prime',monospace;font-size:11.5px;line-height:1.9;margin-top:.4rem;color:var(--cf-muted)}
+.chat .sp{font-weight:700;color:var(--cf-ink)}.chat .hot{color:var(--cf-red)}
+
+/* ── Contradiction badge ── */
+.contra{display:inline-block;background:#FCEBEB;border:.5px solid #E24B4A;border-radius:2px;color:#501313;font-size:9.5px;padding:2px 7px;margin-top:3px;letter-spacing:.04em}
+
+/* ── Evidence grid ── */
+.ev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:.5rem}
+.ev-card{border:.5px solid var(--cf-border);border-radius:4px;padding:.65rem;background:#FDFCF7}
+.ev-tag{font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:3px;color:var(--cf-ink)}
+.ev-desc{font-size:11px;color:var(--cf-muted);line-height:1.5}
+.ev-status{font-size:9.5px;margin-top:4px}
+
+/* ── Warn note ── */
+.warn-note{background:var(--cf-amber-bg);border:.5px solid #EF9F27;border-radius:4px;padding:.5rem .9rem;font-size:11.5px;color:#412402;margin-top:.7rem}
+
+/* ── Verdict / confidential ── */
+.verdict-box{border:2px solid var(--cf-red);border-radius:4px;padding:1rem 1.25rem;margin-top:.9rem;background:var(--cf-red-bg)}
+.verdict-title{font-family:'Special Elite',serif;font-size:15px;color:var(--cf-red-deep);margin-bottom:.6rem;letter-spacing:.05em}
+.v-row{display:flex;gap:9px;font-size:12px;padding:5px 0;color:var(--cf-red-deep);border-bottom:.5px solid #F0997B}
+.v-row:last-child{border-bottom:none}.v-key{font-weight:700;min-width:75px;flex-shrink:0}
+
+/* ── Fingerprint chip ── */
+.fingerprint-chip{display:inline-flex;align-items:center;gap:5px;background:var(--cf-red-bg);border:.5px solid var(--cf-red);border-radius:2px;padding:3px 9px;font-size:10.5px;color:var(--cf-red);letter-spacing:.04em;margin-top:3px}
+
+/* ── Timeline ── */
+.timeline-connector{display:flex;flex-direction:column;gap:0}
+.tl-row{display:flex;gap:0;align-items:stretch}
+.tl-dot-col{display:flex;flex-direction:column;align-items:center;width:20px;flex-shrink:0}
+.tl-dot2{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:9px}
+.tl-line{width:1.5px;background:var(--cf-border);flex:1;min-height:8px}
+.tl-content{padding:5px 0 10px 9px;font-size:12.5px;color:var(--cf-ink);flex:1}
+.tl-time{font-family:'Special Elite',serif;font-size:12px;color:var(--cf-muted);display:block;margin-bottom:1px}
+.tl-event{line-height:1.55}
+.tl-sub{font-size:10.5px;color:var(--cf-muted);margin-top:2px}
+
+/* ── Redact ── */
+.redact{display:inline-block;background:var(--cf-ink);color:transparent;border-radius:2px;user-select:none}
+
+/* ── Suspect detail sections ── */
+.suspect-detail{border:.5px solid var(--cf-border);border-radius:4px;padding:1rem 1.25rem;margin-bottom:1.2rem;background:#FDFCF7;page-break-inside:avoid}
+.detail-title{font-family:'Special Elite',serif;font-size:14px;color:var(--cf-ink)}
+.divider{border:none;border-top:.5px solid var(--cf-border);margin:.7rem 0}
+
+/* ── Page footer ── */
+.page-footer{position:absolute;bottom:10mm;left:18mm;right:18mm;display:flex;justify-content:space-between;font-size:9px;color:var(--cf-muted);letter-spacing:.07em;border-top:.5px solid var(--cf-border);padding-top:4px}
+
+/* ── Print button ── */
+.print-bar{text-align:center;padding:10px;font-family:'Courier Prime',monospace}
+.print-btn{padding:9px 24px;font-family:'Courier Prime',monospace;font-size:13px;border:1.5px solid var(--cf-ink);border-radius:3px;background:var(--cf-ink);color:var(--cf-paper);cursor:pointer;letter-spacing:.07em}
+.print-btn:hover{background:#444}
+</style>
+</head>
+<body>
+
+<!-- PRINT BUTTON -->
+<div class="print-bar no-print" style="margin-top:10px">
+  <button class="print-btn" onclick="window.print()">🖨 Print / Save as PDF</button>
+  <div style="font-size:11px;color:#888;margin-top:6px;font-family:'Courier Prime',monospace">Each section prints on a separate A4 page — set margins to None in print dialog for best results</div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 1 — COVER
+     ════════════════════════════════════════ -->
+<div class="page">
+  <div class="pg-num">CF-209 — Page 1 of 9</div>
+  <div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;margin-bottom:.7rem">
+    <div class="stamp">Reopened</div>
+    <div class="stamp blue">Homicide</div>
+  </div>
+  <div class="classified-bar">CASE FILE — INVESTIGATIVE DIVISION — RESTRICTED</div>
+  <div class="header-box">
+    <div class="case-id">CF-209</div>
+    <div class="case-sub">The Night That Never Ended</div>
+    <div class="meta-row">
+      <div class="meta"><strong>Victim</strong>Rohan Verma, 22</div>
+      <div class="meta"><strong>Location</strong>Private Villa, College Outskirts</div>
+      <div class="meta"><strong>Incident Date</strong>14th March</div>
+      <div class="meta"><strong>Cause of Death</strong>Toxic Ingestion</div>
+      <div class="meta"><strong>Case Status</strong>Reopened — Active</div>
+      <div class="meta"><strong>Assigned To</strong><span class="redact">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+    </div>
+  </div>
+  <div class="epigraph">"Every story has a truth. This one has too many."</div>
+  <div class="sl">File Contents</div>
+  <div class="body">This file contains sensitive investigative material compiled after the case was reopened. It includes victim background, a reconstructed timeline of events, suspect profiles with extracted communications, forensic findings, and physical evidence logs.<br><br>The case was initially classified as <em>Accidental / Undetermined</em>. Following a secondary review, four critical inconsistencies were identified. The case has since been reclassified as <strong>Suspected Homicide</strong>.<br><br>Pages are organised for player distribution. The Confidential page is restricted and intended for event organisers only.</div>
+  <div class="warn-note" style="margin-top:1rem">This file is for internal use only. Dissemination without authorisation is prohibited.</div>
+  <div class="page-footer">
+    <span>CF-209 / INVESTIGATIVE DIVISION</span>
+    <span>RESTRICTED DISTRIBUTION</span>
+    <span>PAGE 1 OF 9</span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 2 — CASE SUMMARY
+     ════════════════════════════════════════ -->
+<div class="page">
+  <div class="pg-num">CF-209 — Page 2 of 9</div>
+  <div class="stamp blue">Case Summary</div>
+  <div class="sl">Overview</div>
+  <div class="body">On the night of 14th March, Rohan Verma hosted a private celebration at an off-campus villa. The gathering comprised close friends, academic collaborators, and selected invitees from his immediate social circle. What began as a routine end-of-semester celebration gradually deteriorated into a night defined by rising tension, public confrontation, and concealed hostility between several attendees.</div>
+  <div class="sl">Incident Reconstruction</div>
+  <div class="body" style="margin-bottom:.5rem">Events on the night unfolded in a sequence that, in retrospect, points toward a premeditated act rather than an impulsive one. The reconstruction below is based on witness statements, photographic evidence, and digital data extracted from recovered devices.</div>
+  <div class="row"><div class="dot d-amber"></div><div><strong>11:45 PM —</strong> A public argument erupted between Rohan and Megha. Multiple attendees later described the atmosphere as hostile. Several guests deliberately distanced themselves from the victim in the aftermath.</div></div>
+  <div class="row"><div class="dot d-amber"></div><div><strong>12:00 AM —</strong> The group assembled for a cake cutting. Photographic evidence independently confirms the presence of all five primary suspects at this precise moment.</div></div>
+  <div class="row"><div class="dot d-red"></div><div><strong>12:05 AM —</strong> A threatening message was sent from the victim's device to a suspect. This communication was later deleted — and subsequently recovered via forensic extraction.</div></div>
+  <div class="row"><div class="dot d-red"></div><div><strong>12:20 AM —</strong> A sudden, unexplained power outage occurred. Duration: approximately five minutes. All indoor surveillance and ambient lighting was lost. The exact movements of all individuals during this window remain unverified.</div></div>
+  <div class="row"><div class="dot d-red"></div><div><strong>12:30 AM —</strong> Drinks were distributed among guests. Forensic analysis would later confirm that a toxic substance had been introduced into a single glass — the victim's. This moment is now considered the primary point of lethal intervention.</div></div>
+  <div class="row"><div class="dot d-amber"></div><div><strong>1:15 AM —</strong> Rohan Verma was last seen alive, observed alone. No further confirmed interaction with any individual has been established.</div></div>
+  <div class="row"><div class="dot d-red"></div><div><strong>2:10 AM —</strong> Rohan Verma was discovered unconscious in his bedroom. No external injuries. No signs of forced entry. No evidence of a physical altercation.</div></div>
+  <div class="sl">Original Classification</div>
+  <div class="body italic">Filed as: Accidental / Undetermined Cause of Death</div>
+  <div class="sl">Grounds for Reopening</div>
+  <div class="row"><div class="dot d-red"></div><div>Conflicting and internally inconsistent witness statements across the 12:30–2:10 AM window</div></div>
+  <div class="row"><div class="dot d-red"></div><div>Deleted digital communications recovered between the victim and a named suspect</div></div>
+  <div class="row"><div class="dot d-red"></div><div>Toxicological confirmation of deliberate poison ingestion — entry via liquid</div></div>
+  <div class="row"><div class="dot d-red"></div><div>Physical evidence — fingerprint match — directly linking a suspect to the victim's glass</div></div>
+  <div class="warn-note">The cumulative weight of this evidence points toward a planned act of poisoning, executed under the social cover of a private gathering.</div>
+  <div class="page-footer">
+    <span>CF-209 / INVESTIGATIVE DIVISION</span>
+    <span>RESTRICTED DISTRIBUTION</span>
+    <span>PAGE 2 OF 9</span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 3 — VICTIM PROFILE
+     ════════════════════════════════════════ -->
+<div class="page">
+  <div class="pg-num">CF-209 — Page 3 of 9</div>
+  <div class="stamp">Victim Profile</div>
+  <div class="header-box">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="initials" style="width:46px;height:46px;background:#D3D1C7;color:#2C2C2A;font-size:15px">RV</div>
+      <div>
+        <div style="font-family:'Special Elite',serif;font-size:17px">Rohan Verma</div>
+        <div style="font-size:11px;color:var(--cf-muted);margin-top:2px">Age 22 — Final Year Undergraduate — Deceased</div>
+      </div>
+    </div>
+    <div class="meta-row" style="margin-top:.75rem">
+      <div class="meta"><strong>Programme</strong>Business Administration</div>
+      <div class="meta"><strong>Status</strong>Final Semester</div>
+      <div class="meta"><strong>Social Role</strong>Group leader / informal authority</div>
+    </div>
+  </div>
+  <div class="sl">Personal Background</div>
+  <div class="body">Rohan Verma occupied a position of disproportionate informal power within his social and academic network. He was widely known for his ability to leverage personal relationships and private information — often for personal gain. Peers describe him as "strategically charming" but deeply self-serving. He maintained control of group dynamics through selective disclosure and cultivated dependency in close associates.</div>
+  <div class="sl">Documented Behavioural Patterns</div>
+  <div class="row"><div class="dot d-red"></div><div>Engaged in ongoing communication patterns consistent with blackmail — threatening to disclose sensitive personal information unless demands were met</div></div>
+  <div class="row"><div class="dot d-red"></div><div>Multiple documented threats issued to different individuals within the same social group — several within the 72 hours prior to the incident</div></div>
+  <div class="row"><div class="dot d-amber"></div><div>Frequent escalating conflicts; in each case, the victim was the instigating party</div></div>
+  <div class="row"><div class="dot d-amber"></div><div>Professionally obstructed at least two associates from securing academic or career opportunities</div></div>
+  <div class="sl">Relational Map</div>
+  <div class="body">At the time of his death, Rohan maintained five close relationships of note — each of which had deteriorated in some form in the weeks preceding the gathering. In at least two cases, digital records confirm he was actively leveraging private information as a means of control. His behaviour in the days immediately before the party was described by multiple individuals as escalatory and erratic.</div>
+  <div class="sl">Last Confirmed Status</div>
+  <div class="body">Last confirmed interaction: approximately <strong>12:30 AM</strong>, during the drink service phase. No verified contact with any individual has been established after this point. Discovered unconscious at 2:10 AM.</div>
+  <div class="page-footer">
+    <span>CF-209 / INVESTIGATIVE DIVISION</span>
+    <span>RESTRICTED DISTRIBUTION</span>
+    <span>PAGE 3 OF 9</span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 4 — TIMELINE
+     ════════════════════════════════════════ -->
+<div class="page">
+  <div class="pg-num">CF-209 — Page 4 of 9</div>
+  <div class="stamp blue">Timeline of Events</div>
+  <div class="sl">Reconstructed Chronology — 14th March</div>
+  <div class="timeline-connector" style="margin-top:.5rem">
+    <div class="tl-row">
+      <div class="tl-dot-col"><div class="tl-dot2 d-green"></div><div class="tl-line"></div></div>
+      <div class="tl-content"><span class="tl-time">10:30 PM</span><span class="tl-event">Party begins at the off-campus villa. All primary suspects arrive within a 40-minute window. Atmosphere initially relaxed.</span><div class="tl-sub"><span class="badge b-green">Confirmed</span></div></div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-dot-col"><div class="tl-dot2 d-amber"></div><div class="tl-line"></div></div>
+      <div class="tl-content"><span class="tl-time">11:45 PM</span><span class="tl-event">Public argument breaks out between Rohan Verma and Megha. Witnessed by multiple attendees. Described as "humiliating" and "deliberately hostile." Mood of gathering shifts significantly.</span><div class="tl-sub"><span class="badge b-amber">Witnessed — multiple sources</span></div></div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-dot-col"><div class="tl-dot2 d-green"></div><div class="tl-line"></div></div>
+      <div class="tl-content"><span class="tl-time">12:00 AM</span><span class="tl-event">Group reassembles for cake cutting. Photographic evidence independently places all five primary suspects at this location at this time.</span><div class="tl-sub"><span class="badge b-green">Photo evidence — confirmed</span></div></div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-dot-col"><div class="tl-dot2 d-red"></div><div class="tl-line"></div></div>
+      <div class="tl-content"><span class="tl-time">12:05 AM</span><span class="tl-event">A threatening communication is sent from Rohan's device to a suspect. Message references exposing sensitive information "tomorrow morning." Message was subsequently deleted from both devices — later recovered via extraction.</span><div class="tl-sub"><span class="badge b-red">Digital record — recovered</span></div></div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-dot-col"><div class="tl-dot2 d-red"></div><div class="tl-line"></div></div>
+      <div class="tl-content"><span class="tl-time">12:20 AM</span><span class="tl-event"><strong>Power outage.</strong> Duration: approximately five minutes. All lighting and electronic surveillance offline. The positions of multiple individuals during this interval are entirely unverified. This window is considered the most significant unmonitored period of the evening.</span><div class="tl-sub"><span class="badge b-red">Critical gap — unmonitored</span></div></div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-dot-col"><div class="tl-dot2 d-red"></div><div class="tl-line"></div></div>
+      <div class="tl-content"><span class="tl-time">12:30 AM</span><span class="tl-event"><strong>Drinks distributed.</strong> Forensic analysis later confirms that a toxic substance was introduced into the victim's glass at or around this time. A suspect is directly linked to the drink service via photographic evidence and witness testimony.</span><div class="tl-sub"><span class="badge b-red">Primary point of lethal intervention</span></div></div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-dot-col"><div class="tl-dot2 d-amber"></div><div class="tl-line"></div></div>
+      <div class="tl-content"><span class="tl-time">1:15 AM</span><span class="tl-event">Rohan Verma last observed alone, by a single witness. No confirmed interaction with any other individual after this point. His condition at this time is unknown.</span><div class="tl-sub"><span class="badge b-amber">Single witness — unverified</span></div></div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-dot-col"><div class="tl-dot2 d-red"></div></div>
+      <div class="tl-content"><span class="tl-time">2:10 AM</span><span class="tl-event"><strong>Victim discovered unconscious in his bedroom.</strong> No external injuries. No evidence of forced entry. No signs of physical struggle. Emergency services contacted immediately.</span><div class="tl-sub"><span class="badge b-red">Confirmed — scene documented</span></div></div>
+    </div>
+  </div>
+  <div class="warn-note">All witness statements covering the 12:30 AM to 2:10 AM window contain material contradictions. No single account from this period should be treated as reliable without corroboration.</div>
+  <div class="page-footer">
+    <span>CF-209 / INVESTIGATIVE DIVISION</span>
+    <span>RESTRICTED DISTRIBUTION</span>
+    <span>PAGE 4 OF 9</span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 5 — SUSPECT PROFILES
+     ════════════════════════════════════════ -->
+<div class="page">
+  <div class="pg-num">CF-209 — Page 5 of 9</div>
+  <div class="stamp">Suspect Profiles</div>
+
+  <!-- Suspect overview grid — NO star or red highlight on Neha -->
+  <div class="s-grid" style="margin-bottom:1rem">
+    <div class="s-card"><div class="initials" style="background:#E6F1FB;color:#185FA5">AI</div><div class="s-name">Aisha</div><div class="s-role">Best Friend</div><div class="s-status b-green">No direct link</div></div>
+    <div class="s-card"><div class="initials" style="background:#FAEEDA;color:#854F0B">KA</div><div class="s-name">Kabir</div><div class="s-role">Business Partner</div><div class="s-status b-amber">Partial alibi</div></div>
+    <div class="s-card"><div class="initials" style="background:#FBEAF0;color:#993556">ME</div><div class="s-name">Megha</div><div class="s-role">Ex-Girlfriend</div><div class="s-status b-green">No proximity</div></div>
+    <div class="s-card"><div class="initials" style="background:#E1F5EE;color:#0F6E56">AR</div><div class="s-name">Arjun</div><div class="s-role">Junior Rival</div><div class="s-status b-green">Strong alibi</div></div>
+    <div class="s-card"><div class="initials" style="background:#FAEEDA;color:#854F0B">NE</div><div class="s-name">Neha</div><div class="s-role">Event Organiser</div><div class="s-status b-amber">Under review</div></div>
+  </div>
+
+  <!-- Aisha -->
+  <div class="suspect-detail">
+    <div class="detail-title">Aisha — Best Friend</div>
+    <hr class="divider">
+    <div class="sl">Relationship to Victim</div>
+    <div class="body">Aisha was Rohan's closest confidant — a friendship spanning over three years. She held extensive knowledge of his personal affairs, financial dealings, and the leverage he held over others. Her relationship with the victim was complex: deeply loyal on the surface, but increasingly strained by his manipulative behaviour in the months before his death.</div>
+    <div class="sl">Profile</div>
+    <div class="row"><div class="dot d-amber"></div><div>Privy to significant personal information about the victim and other suspects — information whose exposure could constitute serious reputational damage</div></div>
+    <div class="row"><div class="dot d-amber"></div><div>Exhibited visible emotional fatigue regarding the victim in the weeks preceding the incident; expressed to two mutual acquaintances that she was "done protecting him"</div></div>
+    <div class="row"><div class="dot d-amber"></div><div>Present at the event from start to finish; confirmed departure time unrecorded</div></div>
+    <div class="sl">Formal Statement</div>
+    <div class="body">"I've known Rohan longer than anyone else here. People think they knew him — they didn't. He had layers, the kind that don't show unless you're really close to someone.<br><br>Yes, we argued that night. That wasn't unusual. Rohan always pushed people to their limits. After the cake cutting, I didn't want to be near him anymore. Megha and I walked toward the terrace. We stayed there for a while — talking, cooling down. Neither of us went back inside until much later.<br><br>I didn't see him after that. I didn't go near him when drinks were being served."</div>
+    <div class="sl">Extracted Communication</div>
+    <div class="chat"><span class="sp">Rohan:</span> You think you know everything, don't you.<br><span class="sp">Aisha:</span> I know enough to end this.<br><span class="sp">Rohan:</span> Try it. See what happens.<br><span class="sp">Aisha:</span> Don't push me, Rohan.</div>
+    <div class="sl">Investigator Assessment</div>
+    <div class="row"><div class="dot d-amber"></div><div>Emotional motive present; statement is internally consistent and corroborated by Megha's independent account</div></div>
+    <div class="row"><div class="dot d-green"></div><div>No confirmed proximity to the victim during the critical 12:20–12:30 AM window; no physical evidence linking her to the drink</div></div>
+    <div class="row"><div class="dot d-green"></div><div>Current assessment: no direct link to the poisoning event — motive exists, opportunity does not</div></div>
+  </div>
+
+  <div class="page-footer">
+    <span>CF-209 / INVESTIGATIVE DIVISION</span>
+    <span>RESTRICTED DISTRIBUTION</span>
+    <span>PAGE 5 OF 9</span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 5b — SUSPECT PROFILES (cont.)
+     ════════════════════════════════════════ -->
+<div class="page">
+  <div class="pg-num">CF-209 — Page 5 of 9 (continued)</div>
+
+  <!-- Kabir -->
+  <div class="suspect-detail">
+    <div class="detail-title">Kabir — Business Partner</div>
+    <hr class="divider">
+    <div class="sl">Relationship to Victim</div>
+    <div class="body">Kabir co-founded a student startup venture with Rohan approximately eight months before the incident. By the time of the gathering, the professional relationship had severely deteriorated. Rohan had begun unilaterally redirecting equity and decision-making authority, and had informed Kabir — informally, without documentation — that he intended to remove him from the venture entirely.</div>
+    <div class="sl">Profile</div>
+    <div class="row"><div class="dot d-red"></div><div>Stood to lose significant equity stake and months of unpaid work upon removal from the venture</div></div>
+    <div class="row"><div class="dot d-red"></div><div>The removal was communicated verbally by the victim on the night of the gathering — escalating an already unstable situation</div></div>
+    <div class="row"><div class="dot d-amber"></div><div>Departed the venue at approximately 12:30 AM — the precise window in which the poisoning is believed to have occurred; exit timing partially corroborated by two witnesses near the entrance</div></div>
+    <div class="sl">Formal Statement</div>
+    <div class="body">"What Rohan did was cut me out of what we built together. No discussion, no documentation, no acknowledgment of what I'd done. I was angry — I won't deny that. But anger isn't motive for murder. After the cake cutting, I needed to leave. The atmosphere was unbearable. I wasn't anywhere near the drinks."</div>
+    <div class="sl">Extracted Communication</div>
+    <div class="chat"><span class="sp">Kabir:</span> You can't cut me out of what we built together.<br><span class="sp">Rohan:</span> I already did. The paperwork is done.<br><span class="sp">Kabir:</span> This will cost you, Rohan.<br><span class="sp">Rohan:</span> Everything already has.</div>
+    <div class="sl">Investigator Assessment</div>
+    <div class="row"><div class="dot d-red"></div><div>Strong financial and professional motive; received direct provocation on the night of the incident</div></div>
+    <div class="row"><div class="dot d-amber"></div><div>Departure time partially corroborated — but the window is not airtight; presence during the power outage cannot be excluded</div></div>
+    <div class="row"><div class="dot d-green"></div><div>No physical evidence placing him at the drink service; no fingerprint evidence recovered</div></div>
+  </div>
+
+  <!-- Megha -->
+  <div class="suspect-detail">
+    <div class="detail-title">Megha — Ex-Girlfriend</div>
+    <hr class="divider">
+    <div class="sl">Relationship to Victim</div>
+    <div class="body">Megha and Rohan ended a two-year relationship approximately three months before the incident. The separation was acrimonious, initiated by the victim, and followed by a period of public tension. Her presence at the gathering — hosted by the victim — was noted by several attendees as unexpected. The evening's argument appears to have reignited unresolved conflict.</div>
+    <div class="sl">Profile</div>
+    <div class="row"><div class="dot d-red"></div><div>Publicly humiliated during the 11:45 PM argument — witnesses describe Rohan's conduct as deliberately degrading</div></div>
+    <div class="row"><div class="dot d-red"></div><div>Made verbal threats during the argument, overheard by multiple attendees: "You'll regret this."</div></div>
+    <div class="row"><div class="dot d-amber"></div><div>Moved to the terrace with Aisha following the confrontation; statement corroborated by Aisha's independent account</div></div>
+    <div class="sl">Formal Statement</div>
+    <div class="body">"What he did that night was calculated. He wanted people to see. After that, I couldn't be near him. Aisha pulled me aside and we went to the terrace. I didn't go near him after that argument. Not during the power cut. Not during the drinks."</div>
+    <div class="sl">Extracted Communication</div>
+    <div class="chat"><span class="sp">Megha:</span> You ruined everything. You know that?<br><span class="sp">Rohan:</span> You ruined it yourself.<br><span class="sp">Megha:</span> You will regret this.<br><span class="sp">Rohan:</span> I already don't.</div>
+    <div class="sl">Investigator Assessment</div>
+    <div class="row"><div class="dot d-red"></div><div>High emotional trigger; made audible threats on the night — however, context suggests reactive anger, not premeditation</div></div>
+    <div class="row"><div class="dot d-green"></div><div>No physical proximity to the victim following the argument; no link to the drink distribution mechanism</div></div>
+    <div class="row"><div class="dot d-green"></div><div>Statement independently corroborated by Aisha — alibi holds</div></div>
+  </div>
+
+  <div class="page-footer">
+    <span>CF-209 / INVESTIGATIVE DIVISION</span>
+    <span>RESTRICTED DISTRIBUTION</span>
+    <span>PAGE 5 OF 9</span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 5c — SUSPECT PROFILES (cont.)
+     ════════════════════════════════════════ -->
+<div class="page">
+  <div class="pg-num">CF-209 — Page 5 of 9 (continued)</div>
+
+  <!-- Arjun -->
+  <div class="suspect-detail">
+    <div class="detail-title">Arjun — Junior Rival</div>
+    <hr class="divider">
+    <div class="sl">Relationship to Victim</div>
+    <div class="body">Arjun occupied a position that the victim repeatedly undercut. Rohan used his social influence to block Arjun from two separate professional opportunities in the preceding academic year. He also circulated unverified negative claims about Arjun's academic conduct to shared contacts. Arjun was aware that Rohan was the source.</div>
+    <div class="sl">Profile</div>
+    <div class="row"><div class="dot d-amber"></div><div>Suffered concrete professional harm attributable to the victim — lost a competitive internship placement as a direct result of Rohan's interference</div></div>
+    <div class="row"><div class="dot d-amber"></div><div>Maintained deliberate distance from the victim in social settings; described by peers as "strategic" about avoiding direct confrontation</div></div>
+    <div class="row"><div class="dot d-green"></div><div>Positioned himself outside the villa for most of the evening — independently confirmed by multiple individuals near the parking area</div></div>
+    <div class="sl">Formal Statement</div>
+    <div class="body">"Rohan had influence over things he had no right to control. That night, I stayed outside. Mostly near the parking. I made calls. I wasn't in the villa during the power cut. I didn't see who served the drinks. Motive doesn't equal action."</div>
+    <div class="sl">Extracted Communication</div>
+    <div class="chat"><span class="sp">Arjun:</span> You took what should have been mine.<br><span class="sp">Rohan:</span> You were never good enough for it. I did them a favour.<br><span class="sp">Arjun:</span> This isn't over.<br><span class="sp">Rohan:</span> For you, it is.</div>
+    <div class="sl">Investigator Assessment</div>
+    <div class="row"><div class="dot d-amber"></div><div>Credible professional motive; digital evidence confirms sustained hostile dynamic</div></div>
+    <div class="row"><div class="dot d-green"></div><div>External witnesses confirm his position outside the villa during the critical window — no access to the drink delivery mechanism</div></div>
+    <div class="row"><div class="dot d-green"></div><div>Strongest alibi of all five suspects</div></div>
+  </div>
+
+  <!-- Neha — SPOILERS REMOVED: no ★, no "primary suspect" label, no red classified bar -->
+  <div class="suspect-detail">
+    <div class="detail-title">Neha — Event Organiser</div>
+    <hr class="divider">
+    <div class="sl">Relationship to Victim</div>
+    <div class="body">Neha was entrusted with organising the entire event — logistics, guest management, catering coordination, and venue operations. This role gave her unrestricted and unquestioned access to every area of the villa throughout the evening. She was present at every key moment, had knowledge of the event schedule, and was the only individual with documented ability to move between preparation areas and guest spaces without suspicion.</div>
+    <div class="sl">Profile</div>
+    <div class="row"><div class="dot d-red"></div><div>Sole suspect with confirmed, unobstructed access to the drink preparation and service area</div></div>
+    <div class="row"><div class="dot d-red"></div><div>Subject of a direct communication from the victim at 12:05 AM — content disputed; message subsequently deleted from both devices</div></div>
+    <div class="row"><div class="dot d-amber"></div><div>Calm and composed throughout the evening — a demeanour described by multiple witnesses as "unusually controlled" given the general tension</div></div>
+    <div class="sl">Formal Statement</div>
+    <div class="body">"I was responsible for the entire event. Every detail — the setup, the timing, the catering, the guests. That meant I was constantly moving, constantly managing.<br><br>After the cake cutting, things became more chaotic. People were moving, some leaving early, some arguing. I focused on managing what I could.<br><br>I did not personally serve drinks. There were others helping with distribution. I may have carried a tray at some point during setup — that's part of the job. But I did not specifically hand anything to Rohan.<br><br>I had no personal grievance with him that would lead to something like this. I was just doing my job."</div>
+    <div class="sl">Extracted Communication</div>
+    <div class="chat"><span class="sp">Rohan:</span> If you don't cooperate by tonight, I'm exposing everything.<br><span class="sp">Neha:</span> You won't get the chance.<br><span class="sp">Rohan:</span> Tomorrow morning. I've already drafted the message.<br><span class="sp">Neha:</span> Then I'll deal with it tonight.</div>
+    <div class="sl">Investigator Assessment</div>
+    <div class="row"><div class="dot d-red"></div><div>Sole suspect with confirmed access to both drink preparation and service areas throughout the evening</div></div>
+    <div class="row"><div class="dot d-amber"></div><div>A photograph timestamped 12:32 AM is under review — contents to be verified against her statement</div></div>
+    <div class="row"><div class="dot d-amber"></div><div>Deleted communications recovered via forensic extraction — content under analysis</div></div>
+  </div>
+
+  <div class="page-footer">
+    <span>CF-209 / INVESTIGATIVE DIVISION</span>
+    <span>RESTRICTED DISTRIBUTION</span>
+    <span>PAGE 5 OF 9</span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 6 — EVIDENCE LOG
+     ════════════════════════════════════════ -->
+<div class="page">
+  <div class="pg-num">CF-209 — Page 6 of 9</div>
+  <div class="stamp blue">Evidence Log</div>
+  <div class="sl">Physical Evidence</div>
+  <div class="ev-grid">
+    <div class="ev-card"><div class="ev-tag">Victim's Glass</div><div class="ev-desc">Residue consistent with toxic substance recovered from the base and interior rim. Fingerprint lifted from surface — submitted for analysis.</div><div class="ev-status"><span class="badge b-red">Critical</span></div></div>
+    <div class="ev-card"><div class="ev-tag">Toxicology Screen</div><div class="ev-desc">Poison confirmed in victim's bloodstream at time of discovery. Entry via liquid confirmed. Substance identified as <span class="redact">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>.</div><div class="ev-status"><span class="badge b-red">Critical</span></div></div>
+    <div class="ev-card"><div class="ev-tag">Photo Record</div><div class="ev-desc">Timestamped images place all five suspects at the cake cutting (12:00 AM). A separate image at 12:32 AM shows a suspect holding a drinks tray near the victim — identity under review.</div><div class="ev-status"><span class="badge b-red">Critical</span></div></div>
+    <div class="ev-card"><div class="ev-tag">Guest List</div><div class="ev-desc">All five primary suspects confirmed present at the venue. Entry and exit records incomplete due to informal nature of the event.</div><div class="ev-status"><span class="badge b-amber">Partial</span></div></div>
+    <div class="ev-card"><div class="ev-tag">Venue Layout</div><div class="ev-desc">Floor plan documents access points between preparation areas and guest spaces. Only one individual had documented unrestricted access to both zones.</div><div class="ev-status"><span class="badge b-amber">Supporting</span></div></div>
+    <div class="ev-card"><div class="ev-tag">Witness Statement</div><div class="ev-desc">One independent guest, not classified as a suspect, confirms without prompting that a named individual handed the victim a drink at approximately 12:30 AM.</div><div class="ev-status"><span class="badge b-red">Critical</span></div></div>
+  </div>
+  <div class="sl">Digital Evidence</div>
+  <!-- Neha's name removed from the rows that named her directly -->
+  <div class="row"><div class="dot d-red"></div><div>Deleted chat thread between Rohan Verma and a suspect recovered from forensic device extraction — thread spans 11 days preceding the gathering</div></div>
+  <div class="row"><div class="dot d-red"></div><div>Threat message sent at 12:05 AM from victim's device — explicitly references exposing private information "tomorrow morning"</div></div>
+  <div class="row"><div class="dot d-red"></div><div>Response sent at 12:06 AM from suspect's device — contains the phrase "I'll deal with it tonight"</div></div>
+  <div class="row"><div class="dot d-amber"></div><div>Message frequency between the victim and one suspect increases substantially in the 72 hours before the party — consistent with an escalating pressure situation</div></div>
+  <div class="row"><div class="dot d-amber"></div><div>All messages were deleted from both devices within an hour of the final exchange — both deletions appear to have been deliberate</div></div>
+  <div class="warn-note">The pattern of escalation, the timing of the deletions, and the content of the recovered messages indicate the communication was treated as incriminating by at least one party.</div>
+  <div class="page-footer">
+    <span>CF-209 / INVESTIGATIVE DIVISION</span>
+    <span>RESTRICTED DISTRIBUTION</span>
+    <span>PAGE 6 OF 9</span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 7 — FORENSIC REPORT
+     ════════════════════════════════════════ -->
+<div class="page">
+  <div class="pg-num">CF-209 — Page 7 of 9</div>
+  <div class="stamp">Forensic Report</div>
+  <div class="classified-bar">Post-mortem findings — restricted distribution</div>
+  <div class="header-box">
+    <div style="font-size:11px;color:var(--cf-muted);margin-bottom:5px;letter-spacing:.05em">Cause of Death — Reclassified</div>
+    <div style="font-family:'Special Elite',serif;font-size:18px">Toxic Ingestion — Suspected Homicide</div>
+    <div class="meta-row" style="margin-top:.65rem">
+      <div class="meta"><strong>Entry Method</strong>Liquid (beverage)</div>
+      <div class="meta"><strong>Onset</strong>30–90 minutes post-ingestion</div>
+      <div class="meta"><strong>Discovery</strong>2:10 AM — approx. 90 min after ingestion</div>
+    </div>
+  </div>
+  <div class="sl">Primary Findings</div>
+  <div class="row"><div class="dot d-red"></div><div>Toxic substance confirmed in bloodstream at time of discovery — concentration consistent with deliberate administration, not accidental exposure</div></div>
+  <div class="row"><div class="dot d-red"></div><div>Entry method confirmed as liquid ingestion — concentration and distribution within organ tissue rule out inhalation or dermal contact</div></div>
+  <div class="row"><div class="dot d-red"></div><div>Residue matching the bloodstream substance recovered from the victim's glass — confirms the glass as the delivery vessel</div></div>
+  <!-- Fingerprint chip: name removed, pending match -->
+  <div class="row"><div class="dot d-red"></div><div>Fingerprint lifted from the victim's glass — single, clear impression — submitted for comparison. Results pending confirmation.<br><div class="fingerprint-chip">Fingerprint — Analysis In Progress</div></div></div>
+  <div class="row"><div class="dot d-green"></div><div>No external injuries — no bruising, lacerations, or signs of restraint</div></div>
+  <div class="row"><div class="dot d-green"></div><div>No signs of forced entry to the bedroom</div></div>
+  <div class="row"><div class="dot d-green"></div><div>No evidence of a physical altercation — victim did not resist or fight</div></div>
+  <div class="sl">Classification</div>
+  <div class="body">Based on the totality of forensic findings, the cause of death has been formally reclassified from <em>Accidental / Undetermined</em> to <strong>Suspected Homicide — Toxic Ingestion</strong>. The mechanism of administration is consistent with deliberate, premeditated action by a person with direct access to the victim's drink.</div>
+  <div class="sl">Secondary Observations</div>
+  <div class="body">The absence of any physical struggle or signs of forced entry indicates the victim either did not anticipate the threat or trusted the individual who administered the substance. Both scenarios are consistent with the act being carried out by a known party — someone whose proximity to the victim would not have triggered alarm.</div>
+  <div class="page-footer">
+    <span>CF-209 / INVESTIGATIVE DIVISION</span>
+    <span>RESTRICTED DISTRIBUTION</span>
+    <span>PAGE 7 OF 9</span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 8 — INVESTIGATION ANALYSIS
+     ════════════════════════════════════════ -->
+<div class="page">
+  <div class="pg-num">CF-209 — Page 8 of 9</div>
+  <div class="stamp blue">Investigation Analysis</div>
+  <div class="sl">Primary Questions for Investigation</div>
+  <div class="row"><div class="dot d-red"></div><div><strong>Who committed the crime?</strong> — Identify the perpetrator and establish the chain of evidence that confirms their guilt</div></div>
+  <div class="row"><div class="dot d-amber"></div><div><strong>How was it executed?</strong> — Reconstruct the precise method of delivery and the steps taken to avoid detection</div></div>
+  <div class="row"><div class="dot d-amber"></div><div><strong>Why was the victim targeted?</strong> — Establish the underlying motive and confirm it aligns with the evidence</div></div>
+  <div class="sl">Suspect Comparison Matrix</div>
+  <div style="overflow-x:auto;margin-top:.4rem">
+    <table class="tbl">
+      <thead><tr><th>Suspect</th><th>Motive</th><th>Opportunity</th><th>Physical Evidence</th><th>Alibi</th><th>Statement Consistency</th></tr></thead>
+      <tbody>
+        <!-- Neha's row: ★ removed, all-red badges replaced with neutral/amber to avoid telegraphing the answer -->
+        <tr><td>Aisha</td><td><span class="badge b-amber">Emotional</span></td><td><span class="badge b-green">None confirmed</span></td><td><span class="badge b-green">None</span></td><td><span class="badge b-green">Strong</span></td><td><span class="badge b-green">Consistent</span></td></tr>
+        <tr><td>Kabir</td><td><span class="badge b-red">Financial</span></td><td><span class="badge b-amber">Partial</span></td><td><span class="badge b-green">None</span></td><td><span class="badge b-amber">Partial</span></td><td><span class="badge b-green">Consistent</span></td></tr>
+        <tr><td>Megha</td><td><span class="badge b-amber">Emotional</span></td><td><span class="badge b-green">None confirmed</span></td><td><span class="badge b-green">None</span></td><td><span class="badge b-green">Strong</span></td><td><span class="badge b-green">Consistent</span></td></tr>
+        <tr><td>Arjun</td><td><span class="badge b-amber">Professional</span></td><td><span class="badge b-green">None</span></td><td><span class="badge b-green">None</span></td><td><span class="badge b-green">Strong</span></td><td><span class="badge b-green">Consistent</span></td></tr>
+        <tr><td>Neha</td><td><span class="badge b-red">Disputed</span></td><td><span class="badge b-amber">Unconfirmed</span></td><td><span class="badge b-amber">Under analysis</span></td><td><span class="badge b-amber">Partial</span></td><td><span class="badge b-amber">Under review</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="sl">Key Contradictions to Resolve</div>
+  <div class="row"><div class="dot d-red"></div><div>At least one suspect's statement is directly contradicted by photographic and witness evidence from the 12:30 AM window — identify who and why</div></div>
+  <div class="row"><div class="dot d-red"></div><div>A fingerprint recovered from the victim's glass does not match the assigned drink service role of the individual it belongs to — establish how it came to be there</div></div>
+  <div class="row"><div class="dot d-red"></div><div>A digital communication sent 24 minutes before the estimated point of poisoning contains a time-proximate threat — determine who sent it and whether it was acted upon</div></div>
+  <div class="warn-note">Investigators should note that the convergence of motive, opportunity, physical evidence, and a provable false statement in a single individual would represent a decisive finding. The matrix above should be cross-referenced with all available evidence before reaching a conclusion.</div>
+  <div class="page-footer">
+    <span>CF-209 / INVESTIGATIVE DIVISION</span>
+    <span>RESTRICTED DISTRIBUTION</span>
+    <span>PAGE 8 OF 9</span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 9 — CONFIDENTIAL (ORGANISER ONLY)
+     ════════════════════════════════════════ -->
+<div class="page">
+  <div class="pg-num">CF-209 — Page 9 of 9</div>
+  <div style="border:.5px solid var(--cf-border);border-radius:4px;padding:1.5rem 1.25rem;text-align:center;background:#FDFCF7;margin-top:.75rem">
+    <div style="font-size:26px;margin-bottom:.5rem">🔒</div>
+    <div style="font-family:'Special Elite',serif;font-size:16px;margin-bottom:6px">Confidential — Organiser Access Only</div>
+    <div style="font-size:12px;color:var(--cf-muted);max-width:320px;margin:0 auto;line-height:1.65">This page contains the final answer, solution breakdown, and suggested reveal script. Do not distribute to players.</div>
+    <div style="margin-top:1rem;font-size:11px;color:var(--cf-muted);letter-spacing:.08em;font-family:'Courier Prime',monospace">[ SOLUTION SEALED — ORGANISER USE ONLY ]</div>
+  </div>
+
+  <!-- Solution content — kept intact for organiser reference -->
+  <div style="margin-top:1.5rem">
+    <div class="stamp">Confidential</div>
+    <div class="classified-bar">Final solution — authorised access only</div>
+    <div class="verdict-box">
+      <div class="verdict-title">Final Verdict — CF-209</div>
+      <div class="v-row"><span class="v-key">Perpetrator</span><span>Neha — Event Organiser</span></div>
+      <div class="v-row"><span class="v-key">Method</span><span>Poison introduced into the victim's drink during the 12:30 AM service window, administered personally by the suspect</span></div>
+      <div class="v-row"><span class="v-key">Motive</span><span>Blackmail — Rohan threatened to publicly expose sensitive information about Neha the following morning. She acted that night to prevent it.</span></div>
+      <div class="v-row"><span class="v-key">Preparation</span><span>Substance acquired in advance. Power outage at 12:20 AM used as cover to prepare and isolate the poisoned glass prior to distribution.</span></div>
+    </div>
+    <div class="sl">Execution — Step by Step</div>
+    <div class="row"><div class="dot d-red"></div><div><strong>Pre-event:</strong> Neha acquired the toxic substance in the days before the party — consistent with the escalating communication pattern observed in the 72-hour digital record</div></div>
+    <div class="row"><div class="dot d-red"></div><div><strong>12:05 AM:</strong> Rohan's threat message confirms the exposure deadline was set for the next morning — creating a fixed, immovable window within which Neha had to act</div></div>
+    <div class="row"><div class="dot d-red"></div><div><strong>12:20 AM:</strong> The power outage — whether engineered or opportunistic — provided the unmonitored interval in which the victim's drink could be prepared without witness</div></div>
+    <div class="row"><div class="dot d-red"></div><div><strong>12:30 AM:</strong> Under the legitimate cover of her organiser role, Neha personally delivered the prepared drink to the victim — confirmed by photograph and independent witness testimony</div></div>
+    <div class="row"><div class="dot d-red"></div><div><strong>Post-event:</strong> Maintained composed behaviour throughout; deleted her communications with the victim; denied involvement when questioned; provided a statement with a material falsehood</div></div>
+    <div class="sl">Suggested Reveal Prompt (Organiser Script)</div>
+    <div class="chat" style="line-height:1.8">"We've reviewed the statements, the evidence, and the forensic record. One person had everything they needed to commit this crime — the access, the motive, and the moment. The evidence doesn't point to someone who acted in anger. It points to someone who planned carefully, stayed calm, and waited for the right moment. The fingerprint on the glass belongs to someone who said they never touched it. The message says 'I'll deal with it tonight.' The photograph shows exactly how."</div>
+    <div class="epigraph" style="margin-top:1.2rem">"Not everyone who smiles is innocent."</div>
+  </div>
+  <div class="page-footer">
+    <span>CF-209 / INVESTIGATIVE DIVISION</span>
+    <span>CONFIDENTIAL — ORGANISER ONLY</span>
+    <span>PAGE 9 OF 9</span>
+  </div>
+</div>
+
+</body>
+</html>
