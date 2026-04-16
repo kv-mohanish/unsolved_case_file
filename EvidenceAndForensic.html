@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evidence and Forensic</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cf-ink:#2C2C2A;
+  --cf-paper:#F7F5EE;
+  --cf-muted:#888780;
+  --cf-border:#C8C6BB;
+  --cf-red:#993C1D;
+  --cf-red-bg:#FAECE7;
+  --cf-red-deep:#4A1B0C;
+  --cf-amber:#854F0B;
+  --cf-amber-bg:#FAEEDA;
+  --cf-green:#3B6D11;
+  --cf-green-bg:#EAF3DE;
+  --cf-blue:#185FA5;
+  --cf-blue-bg:#E6F1FB;
+}
+
+body{background:#E8E6DF;font-family:'Courier Prime',monospace;color:var(--cf-ink)}
+
+.page{
+  width:210mm;
+  min-height:297mm;
+  background:var(--cf-paper);
+  margin:12mm auto;
+  padding:18mm 18mm 22mm;
+  box-shadow:0 4px 24px rgba(0,0,0,.18);
+  page-break-after:always;
+  position:relative;
+}
+.page:last-child{page-break-after:auto}
+
+@media print{
+  body{background:none}
+  .page{
+    margin:0;
+    box-shadow:none;
+    padding:14mm 16mm 16mm;
+    width:210mm;
+    min-height:297mm;
+    page-break-after:always;
+  }
+  .no-print{display:none!important}
+}
+
+.pg-num{font-size:10px;color:var(--cf-muted);text-align:right;margin-bottom:.4rem;letter-spacing:.08em;font-family:'Courier Prime',monospace}
+.body{font-size:12.5px;line-height:1.9;color:var(--cf-ink)}
+.italic{font-style:italic;color:var(--cf-muted)}
+
+.sl{font-size:10px;letter-spacing:.15em;color:var(--cf-muted);text-transform:uppercase;border-bottom:.5px solid var(--cf-border);padding-bottom:4px;margin:1rem 0 .55rem;font-family:'Courier Prime',monospace}
+
+.stamp{display:inline-flex;align-items:center;border:2.5px solid var(--cf-red);color:var(--cf-red);font-family:'Special Elite',serif;font-size:11px;letter-spacing:.18em;padding:3px 11px 4px;transform:rotate(-2.2deg);margin-bottom:.9rem;opacity:.82;text-transform:uppercase}
+.stamp.blue{border-color:var(--cf-blue);color:var(--cf-blue);transform:rotate(1.3deg)}
+.stamp.green{border-color:var(--cf-green);color:var(--cf-green);transform:rotate(-1deg)}
+
+.classified-bar{background:var(--cf-red);color:#FAECE7;font-family:'Special Elite',serif;font-size:10px;letter-spacing:.2em;text-align:center;padding:4px 0;margin-bottom:1rem;border-radius:2px}
+
+.header-box{border:.5px solid var(--cf-border);border-radius:4px;padding:1rem 1.25rem;margin-bottom:1.1rem;background:#FDFCF7}
+.case-id{font-family:'Special Elite',serif;font-size:20px;letter-spacing:.1em}
+.case-sub{font-family:'Special Elite',serif;font-size:13px;color:var(--cf-muted);margin-top:2px;letter-spacing:.05em}
+.meta-row{display:flex;flex-wrap:wrap;gap:1rem;margin-top:.65rem}
+.meta{font-size:11px;color:var(--cf-muted)}.meta strong{display:block;font-size:12px;font-weight:700;color:var(--cf-ink);margin-bottom:1px}
+
+.row{display:flex;gap:9px;align-items:flex-start;padding:6px 0;border-bottom:.5px solid var(--cf-border);font-size:12.5px}
+.row:last-child{border-bottom:none}
+.dot{width:7px;height:7px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.d-red{background:#993C1D}.d-amber{background:#BA7517}.d-green{background:#3B6D11}
+
+.epigraph{font-family:'Special Elite',serif;font-size:13.5px;color:var(--cf-muted);border-left:3px solid var(--cf-border);padding-left:.9rem;margin:1rem 0;font-style:italic}
+
+.tbl{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:.4rem}
+.tbl th{text-align:left;padding:5px 8px;font-size:10px;letter-spacing:.09em;color:var(--cf-muted);border-bottom:.5px solid var(--cf-border);font-weight:500}
+.tbl td{padding:7px 8px;border-bottom:.5px solid var(--cf-border);vertical-align:top;color:var(--cf-ink)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl .crit td{background:var(--cf-red-bg);color:var(--cf-red-deep)}
+
+.badge{display:inline-block;font-size:9.5px;padding:2px 6px;border-radius:2px;letter-spacing:.04em}
+.b-red{background:var(--cf-red-bg);color:var(--cf-red)}.b-amber{background:var(--cf-amber-bg);color:var(--cf-amber)}.b-green{background:var(--cf-green-bg);color:var(--cf-green)}.b-blue{background:var(--cf-blue-bg);color:var(--cf-blue)}
+
+.s-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:.5rem}
+.s-card{border:.5px solid var(--cf-border);border-radius:4px;padding:.6rem .5rem;background:#FDFCF7;text-align:center}
+.initials{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;margin:0 auto 6px}
+.s-name{font-size:12px;font-weight:500;color:var(--cf-ink)}.s-role{font-size:10px;color:var(--cf-muted);margin-top:1px}
+.s-status{font-size:9.5px;margin-top:4px;padding:2px 7px;border-radius:2px;display:inline-block;letter-spacing:.03em}
+
+.chat{background:#F2EFE8;border:.5px solid var(--cf-border);border-radius:4px;padding:.6rem .9rem;font-family:'Courier Prime',monospace;font-size:11.5px;line-height:1.9;margin-top:.4rem;color:var(--cf-muted)}
+.chat .sp{font-weight:700;color:var(--cf-ink)}.chat .hot{color:var(--cf-red)}
+
+.contra{display:inline-block;background:#FCEBEB;border:.5px solid #E24B4A;border-radius:2px;color:#501313;font-size:9.5px;padding:2px 7px;margin-top:3px;letter-spacing:.04em}
+
+.ev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:.5rem}
+.ev-card{border:.5px solid var(--cf-border);border-radius:4px;padding:.65rem;background:#FDFCF7}
+.ev-tag{font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:3px;color:var(--cf-ink)}
+.ev-desc{font-size:11px;color:var(--cf-muted);line-height:1.5}
+.ev-status{font-size:9.5px;margin-top:4px}
+
+.warn-note{background:var(--cf-amber-bg);border:.5px solid #EF9F27;border-radius:4px;padding:.5rem .9rem;font-size:11.5px;color:#412402;margin-top:.7rem}
+
+.verdict-box{border:2px solid var(--cf-red);border-radius:4px;padding:1rem 1.25rem;margin-top:.9rem;background:var(--cf-red-bg)}
+.verdict-title{font-family:'Special Elite',serif;font-size:15px;color:var(--cf-red-deep);margin-bottom:.6rem;letter-spacing:.05em}
+.v-row{display:flex;gap:9px;font-size:12px;padding:5px 0;color:var(--cf-red-deep);border-bottom:.5px solid #F0997B}
+.v-row:last-child{border-bottom:none}.v-key{font-weight:700;min-width:90px;flex-shrink:0}
+
+.fingerprint-chip{display:inline-flex;align-items:center;gap:5px;background:var(--cf-red-bg);border:.5px solid var(--cf-red);border-radius:2px;padding:3px 9px;font-size:10.5px;color:var(--cf-red);letter-spacing:.04em;margin-top:3px}
+
+.timeline-connector{display:flex;flex-direction:column;gap:0}
+.tl-row{display:flex;gap:0;align-items:stretch}
+.tl-dot-col{display:flex;flex-direction:column;align-items:center;width:20px;flex-shrink:0}
+.tl-dot2{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:9px}
+.tl-line{width:1.5px;background:var(--cf-border);flex:1;min-height:8px}
+.tl-content{padding:5px 0 10px 9px;font-size:12.5px;color:var(--cf-ink);flex:1}
+.tl-time{font-family:'Special Elite',serif;font-size:12px;color:var(--cf-muted);display:block;margin-bottom:1px}
+.tl-event{line-height:1.55}
+.tl-sub{font-size:10.5px;color:var(--cf-muted);margin-top:2px}
+
+.redact{display:inline-block;background:var(--cf-ink);color:transparent;border-radius:2px;user-select:none}
+
+.suspect-detail{border:.5px solid var(--cf-border);border-radius:4px;padding:1rem 1.25rem;margin-bottom:1.2rem;background:#FDFCF7;page-break-inside:avoid}
+.detail-title{font-family:'Special Elite',serif;font-size:14px;color:var(--cf-ink)}
+.divider{border:none;border-top:.5px solid var(--cf-border);margin:.7rem 0}
+
+.page-footer{position:absolute;bottom:10mm;left:18mm;right:18mm;display:flex;justify-content:space-between;font-size:9px;color:var(--cf-muted);letter-spacing:.07em;border-top:.5px solid var(--cf-border);padding-top:4px}
+
+.print-bar{text-align:center;padding:10px;font-family:'Courier Prime',monospace}
+.print-btn{padding:9px 24px;font-family:'Courier Prime',monospace;font-size:13px;border:1.5px solid var(--cf-ink);border-radius:3px;background:var(--cf-ink);color:var(--cf-paper);cursor:pointer;letter-spacing:.07em}
+.print-btn:hover{background:#444}
+
+.note-box{background:var(--cf-blue-bg);border:.5px solid var(--cf-blue);border-radius:4px;padding:.6rem .9rem;font-size:11.5px;color:#0D3A6A;margin-top:.7rem;line-height:1.7}
+.redherring{background:#F5EAF7;border:.5px solid #9B4CB5;border-radius:4px;padding:.5rem .9rem;font-size:11px;color:#3C1050;margin-top:.5rem;line-height:1.65}
+.cross-ref{font-size:10px;color:var(--cf-muted);letter-spacing:.05em;margin-top:4px;font-style:italic}
+</style>
+</head>
+<body>
+    <!-- PAGE 10 — EVIDENCE LOG -->
+<div class="page">
+  <div class="pg-num">CF-209 — Page 10 of 14</div>
+  <div class="stamp blue">Evidence Log</div>
+  <div class="sl">Physical Evidence</div>
+  <div class="ev-grid">
+    <div class="ev-card"><div class="ev-tag">Victim's Glass — E-01</div><div class="ev-desc">Residue of toxic compound recovered from base and interior rim. Fingerprint lifted from outer surface — single, clear impression — submitted for comparison against all five suspects. Match pending confirmation from lab.</div><div class="ev-status"><span class="badge b-red">Critical</span></div></div>
+    <div class="ev-card"><div class="ev-tag">Toxicology Report — E-02</div><div class="ev-desc">Controlled toxic compound confirmed in bloodstream at time of discovery. Entry via liquid confirmed. Concentration consistent with deliberate lethal dosing. Onset 30–90 minutes post-ingestion — consistent with 12:30 AM administration and 2:10 AM discovery.</div><div class="ev-status"><span class="badge b-red">Critical</span></div></div>
+    <div class="ev-card"><div class="ev-tag">Photograph A — E-03</div><div class="ev-desc">12:00 AM group photograph — all five suspects confirmed present at the cake cutting. Last confirmed simultaneous placement of all parties. Used to establish baseline positions before the critical window.</div><div class="ev-status"><span class="badge b-green">Confirmed</span></div></div>
+    <div class="ev-card"><div class="ev-tag">Photograph B — E-04</div><div class="ev-desc">Timestamped 12:32 AM. Partially visible figure near drinks tray in main hall. Face obscured. Clothing detail, hand position, and posture are subject to analysis. Witness accounts partially support two different identifications — both contested.</div><div class="ev-status"><span class="badge b-amber">Under analysis</span></div></div>
+    <div class="ev-card"><div class="ev-tag">Service Corridor Log — E-05</div><div class="ev-desc">A bag or case was carried into the service corridor at approximately 11:20 PM — confirmed by one witness. No corresponding item has been identified in the venue inventory. No staff member has acknowledged owning or moving such an item. The corridor provides direct access to the catering prep station.</div><div class="ev-status"><span class="badge b-red">Unresolved</span></div></div>
+    <div class="ev-card"><div class="ev-tag">Phone Record — E-06</div><div class="ev-desc">An outgoing call was placed at 12:19 AM — duration 11 seconds — from a device registered to one of the five suspects. Receiving number traced to a prepaid device, since disconnected. The call's timing — one minute before the power outage — has been flagged as potentially significant.</div><div class="ev-status"><span class="badge b-red">Under review</span></div></div>
+    <div class="ev-card"><div class="ev-tag">Guest Log — E-07</div><div class="ev-desc">All five primary suspects confirmed present. Entry and exit records incomplete — the event was informal, no sign-in sheet maintained. Departure times are self-reported only. At least one stated departure time is disputed by a witness account.</div><div class="ev-status"><span class="badge b-amber">Partial</span></div></div>
+    <div class="ev-card"><div class="ev-tag">Venue Layout — E-08</div><div class="ev-desc">Floor plan confirms the service corridor connects directly to the catering prep area and the main hall drinks station. Access is not visible from the main social areas. Any individual using the corridor could move undetected between prep and distribution without passing through guest spaces.</div><div class="ev-status"><span class="badge b-amber">Supporting</span></div></div>
+    <div class="ev-card"><div class="ev-tag">Witness Statement — E-09</div><div class="ev-desc">An independent guest (not among the five suspects) reports seeing a figure near the drinks tray at approximately 12:30 AM. Description: female, dark clothing, moving with "purpose and familiarity" — as if she "knew exactly where everything was." Statement taken informally. Witness unavailable for follow-up.</div><div class="ev-status"><span class="badge b-amber">Partial — single account</span></div></div>
+  </div>
+  <div class="sl">Digital Evidence</div>
+  <div class="row"><div class="dot d-red"></div><div><strong>Recovered Thread — E-10:</strong> Eleven-day communication exchange between Rohan and a suspect — forensically recovered from both devices after coordinated deletion. Spans 11 days. Contains escalating pressure, a specific implicit threat, and a final exchange at 12:05–12:06 AM that is now considered the primary digital evidence of motive.</div></div>
+  <div class="row"><div class="dot d-red"></div><div><strong>Pre-event message — E-11:</strong> A message sent on 13th March reads: "If you go through with this tomorrow, you won't have to worry about the morning." Sender confirmed. Receiver confirmed. The phrase "tomorrow morning" aligns with the threat Rohan issued at 12:05 AM.</div></div>
+  <div class="row"><div class="dot d-red"></div><div><strong>Ambiguous prior message — E-12:</strong> A message sent on 13th March by a second suspect reads: "I've already done what I needed to do." This statement implies prior action. No explanation for what action was taken has been provided or verified.</div></div>
+  <div class="row"><div class="dot d-amber"></div><div><strong>Message frequency — E-13:</strong> Communication volume between Rohan and one suspect increases by approximately 340% in the 72 hours before the party — consistent with escalating pressure from a blackmail dynamic.</div></div>
+  <div class="row"><div class="dot d-amber"></div><div><strong>Coordinated deletions — E-14:</strong> All messages between Rohan and the primary suspect were deleted from both devices within 60 minutes of the 12:06 AM exchange. Both deletions appear deliberate and near-simultaneous — suggesting coordination or anticipation.</div></div>
+  <div class="warn-note">Three separate digital threads contain language that implies foreknowledge of a deadline set for the morning of 15th March. Two are from different suspects. One is from the victim. The convergence of this language across multiple parties is the most significant pattern in the digital record.</div>
+  <div class="page-footer">
+    <span>CF-209 / INVESTIGATIVE DIVISION</span>
+    <span>RESTRICTED DISTRIBUTION</span>
+    <span>PAGE 10 OF 14</span>
+  </div>
+</div>
+<!-- PAGE 12 — FORENSIC REPORT -->
+<div class="page">
+  <div class="pg-num">CF-209 — Page 12 of 14</div>
+  <div class="stamp">Forensic Report</div>
+  <div class="classified-bar">Post-mortem findings — restricted distribution</div>
+  <div class="header-box">
+    <div style="font-size:11px;color:var(--cf-muted);margin-bottom:5px;letter-spacing:.05em">Cause of Death — Reclassified</div>
+    <div style="font-family:'Special Elite',serif;font-size:18px">Confirmed Homicide — Deliberate Toxic Ingestion</div>
+    <div class="meta-row" style="margin-top:.65rem">
+      <div class="meta"><strong>Entry Method</strong>Liquid (beverage)</div>
+      <div class="meta"><strong>Delivery Vessel</strong>Victim's drinking glass — confirmed via residue</div>
+      <div class="meta"><strong>Estimated Time of Administration</strong>12:20–12:35 AM</div>
+      <div class="meta"><strong>Onset Window</strong>30–90 minutes post-ingestion</div>
+      <div class="meta"><strong>Discovery Time</strong>2:10 AM — approximately 90–100 minutes post-ingestion</div>
+    </div>
+  </div>
+  <div class="sl">Primary Findings</div>
+  <div class="row"><div class="dot d-red"></div><div>Toxic substance confirmed in bloodstream at time of discovery — concentration is consistent with a deliberate, precisely calculated dose. Not accidental. Not self-administered. The concentration level required advance knowledge of the compound and its effects.</div></div>
+  <div class="row"><div class="dot d-red"></div><div>Entry method confirmed as liquid ingestion — concentration and distribution within organ tissue conclusively rules out inhalation or dermal absorption. The compound entered via the digestive tract in a single event.</div></div>
+  <div class="row"><div class="dot d-red"></div><div>Residue matching the bloodstream compound recovered from the victim's glass — confirms the glass as the delivery vessel. Residue concentration in the glass is consistent with a dose prepared in a concentrated form and introduced directly into a diluted liquid.</div></div>
+  <div class="row"><div class="dot d-red"></div><div>Fingerprint lifted from the outer surface of the victim's glass — single, clear impression. <strong>Submitted for comparison.</strong><br><div class="fingerprint-chip">Fingerprint — Comparison Results Pending</div></div></div>
+  <div class="row"><div class="dot d-red"></div><div>Forensic analysis of the compound indicates it is not freely commercially available. Acquisition would require either specialist knowledge, an informal or black-market source, or access to a restricted professional environment. <strong>This is not something that could be purchased casually or stumbled upon.</strong> Whoever administered this substance obtained it in advance. The act was premeditated.</div></div>
+  <div class="row"><div class="dot d-green"></div><div>No external injuries — no bruising, lacerations, or signs of physical restraint.</div></div>
+  <div class="row"><div class="dot d-green"></div><div>No forced entry to the bedroom. The victim retired voluntarily. He did not know he was dying.</div></div>
+  <div class="row"><div class="dot d-green"></div><div>No evidence of a physical altercation prior to incapacitation. The victim did not resist because he had no reason to.</div></div>
+  <div class="sl">Classification</div>
+  <div class="body">Based on the totality of forensic findings, this case is formally classified as <strong>Confirmed Homicide — Deliberate Toxic Ingestion.</strong> The mechanism of administration is consistent with premeditated action by an individual with direct access to the victim's drink, knowledge of the compound's effects, and sufficient composure to administer it without detection in a social setting.</div>
+  <div class="sl">Forensic Implication for Suspect Assessment</div>
+  <div class="body">The compound's restricted nature narrows the field. The act required: (1) advance acquisition of a non-trivial substance, (2) preparation in a concentrated form, (3) access to the victim's specific glass during the administration window, and (4) the ability to act without drawing attention. Investigators should weigh which suspect satisfies all four criteria — not merely one or two of them.</div>
+  <div class="warn-note">The absence of struggle or visible distress indicates the victim trusted the individual who administered the substance — or simply did not see them do it. Either scenario is consistent with someone whose proximity to him was expected and unremarkable.</div>
+  <div class="page-footer">
+    <span>CF-209 / INVESTIGATIVE DIVISION</span>
+    <span>RESTRICTED DISTRIBUTION</span>
+    <span>PAGE 12 OF 14</span>
+  </div>
+</div>
+</body>
+</html>

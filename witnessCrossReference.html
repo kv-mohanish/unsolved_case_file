@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Witness Cross Reference</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cf-ink:#2C2C2A;
+  --cf-paper:#F7F5EE;
+  --cf-muted:#888780;
+  --cf-border:#C8C6BB;
+  --cf-red:#993C1D;
+  --cf-red-bg:#FAECE7;
+  --cf-red-deep:#4A1B0C;
+  --cf-amber:#854F0B;
+  --cf-amber-bg:#FAEEDA;
+  --cf-green:#3B6D11;
+  --cf-green-bg:#EAF3DE;
+  --cf-blue:#185FA5;
+  --cf-blue-bg:#E6F1FB;
+}
+
+body{background:#E8E6DF;font-family:'Courier Prime',monospace;color:var(--cf-ink)}
+
+.page{
+  width:210mm;
+  min-height:297mm;
+  background:var(--cf-paper);
+  margin:12mm auto;
+  padding:18mm 18mm 22mm;
+  box-shadow:0 4px 24px rgba(0,0,0,.18);
+  page-break-after:always;
+  position:relative;
+}
+.page:last-child{page-break-after:auto}
+
+@media print{
+  body{background:none}
+  .page{
+    margin:0;
+    box-shadow:none;
+    padding:14mm 16mm 16mm;
+    width:210mm;
+    min-height:297mm;
+    page-break-after:always;
+  }
+  .no-print{display:none!important}
+}
+
+.pg-num{font-size:10px;color:var(--cf-muted);text-align:right;margin-bottom:.4rem;letter-spacing:.08em;font-family:'Courier Prime',monospace}
+.body{font-size:12.5px;line-height:1.9;color:var(--cf-ink)}
+.italic{font-style:italic;color:var(--cf-muted)}
+
+.sl{font-size:10px;letter-spacing:.15em;color:var(--cf-muted);text-transform:uppercase;border-bottom:.5px solid var(--cf-border);padding-bottom:4px;margin:1rem 0 .55rem;font-family:'Courier Prime',monospace}
+
+.stamp{display:inline-flex;align-items:center;border:2.5px solid var(--cf-red);color:var(--cf-red);font-family:'Special Elite',serif;font-size:11px;letter-spacing:.18em;padding:3px 11px 4px;transform:rotate(-2.2deg);margin-bottom:.9rem;opacity:.82;text-transform:uppercase}
+.stamp.blue{border-color:var(--cf-blue);color:var(--cf-blue);transform:rotate(1.3deg)}
+.stamp.green{border-color:var(--cf-green);color:var(--cf-green);transform:rotate(-1deg)}
+
+.classified-bar{background:var(--cf-red);color:#FAECE7;font-family:'Special Elite',serif;font-size:10px;letter-spacing:.2em;text-align:center;padding:4px 0;margin-bottom:1rem;border-radius:2px}
+
+.header-box{border:.5px solid var(--cf-border);border-radius:4px;padding:1rem 1.25rem;margin-bottom:1.1rem;background:#FDFCF7}
+.case-id{font-family:'Special Elite',serif;font-size:20px;letter-spacing:.1em}
+.case-sub{font-family:'Special Elite',serif;font-size:13px;color:var(--cf-muted);margin-top:2px;letter-spacing:.05em}
+.meta-row{display:flex;flex-wrap:wrap;gap:1rem;margin-top:.65rem}
+.meta{font-size:11px;color:var(--cf-muted)}.meta strong{display:block;font-size:12px;font-weight:700;color:var(--cf-ink);margin-bottom:1px}
+
+.row{display:flex;gap:9px;align-items:flex-start;padding:6px 0;border-bottom:.5px solid var(--cf-border);font-size:12.5px}
+.row:last-child{border-bottom:none}
+.dot{width:7px;height:7px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.d-red{background:#993C1D}.d-amber{background:#BA7517}.d-green{background:#3B6D11}
+
+.epigraph{font-family:'Special Elite',serif;font-size:13.5px;color:var(--cf-muted);border-left:3px solid var(--cf-border);padding-left:.9rem;margin:1rem 0;font-style:italic}
+
+.tbl{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:.4rem}
+.tbl th{text-align:left;padding:5px 8px;font-size:10px;letter-spacing:.09em;color:var(--cf-muted);border-bottom:.5px solid var(--cf-border);font-weight:500}
+.tbl td{padding:7px 8px;border-bottom:.5px solid var(--cf-border);vertical-align:top;color:var(--cf-ink)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl .crit td{background:var(--cf-red-bg);color:var(--cf-red-deep)}
+
+.badge{display:inline-block;font-size:9.5px;padding:2px 6px;border-radius:2px;letter-spacing:.04em}
+.b-red{background:var(--cf-red-bg);color:var(--cf-red)}.b-amber{background:var(--cf-amber-bg);color:var(--cf-amber)}.b-green{background:var(--cf-green-bg);color:var(--cf-green)}.b-blue{background:var(--cf-blue-bg);color:var(--cf-blue)}
+
+.s-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:.5rem}
+.s-card{border:.5px solid var(--cf-border);border-radius:4px;padding:.6rem .5rem;background:#FDFCF7;text-align:center}
+.initials{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;margin:0 auto 6px}
+.s-name{font-size:12px;font-weight:500;color:var(--cf-ink)}.s-role{font-size:10px;color:var(--cf-muted);margin-top:1px}
+.s-status{font-size:9.5px;margin-top:4px;padding:2px 7px;border-radius:2px;display:inline-block;letter-spacing:.03em}
+
+.chat{background:#F2EFE8;border:.5px solid var(--cf-border);border-radius:4px;padding:.6rem .9rem;font-family:'Courier Prime',monospace;font-size:11.5px;line-height:1.9;margin-top:.4rem;color:var(--cf-muted)}
+.chat .sp{font-weight:700;color:var(--cf-ink)}.chat .hot{color:var(--cf-red)}
+
+.contra{display:inline-block;background:#FCEBEB;border:.5px solid #E24B4A;border-radius:2px;color:#501313;font-size:9.5px;padding:2px 7px;margin-top:3px;letter-spacing:.04em}
+
+.ev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:.5rem}
+.ev-card{border:.5px solid var(--cf-border);border-radius:4px;padding:.65rem;background:#FDFCF7}
+.ev-tag{font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:3px;color:var(--cf-ink)}
+.ev-desc{font-size:11px;color:var(--cf-muted);line-height:1.5}
+.ev-status{font-size:9.5px;margin-top:4px}
+
+.warn-note{background:var(--cf-amber-bg);border:.5px solid #EF9F27;border-radius:4px;padding:.5rem .9rem;font-size:11.5px;color:#412402;margin-top:.7rem}
+
+.verdict-box{border:2px solid var(--cf-red);border-radius:4px;padding:1rem 1.25rem;margin-top:.9rem;background:var(--cf-red-bg)}
+.verdict-title{font-family:'Special Elite',serif;font-size:15px;color:var(--cf-red-deep);margin-bottom:.6rem;letter-spacing:.05em}
+.v-row{display:flex;gap:9px;font-size:12px;padding:5px 0;color:var(--cf-red-deep);border-bottom:.5px solid #F0997B}
+.v-row:last-child{border-bottom:none}.v-key{font-weight:700;min-width:90px;flex-shrink:0}
+
+.fingerprint-chip{display:inline-flex;align-items:center;gap:5px;background:var(--cf-red-bg);border:.5px solid var(--cf-red);border-radius:2px;padding:3px 9px;font-size:10.5px;color:var(--cf-red);letter-spacing:.04em;margin-top:3px}
+
+.timeline-connector{display:flex;flex-direction:column;gap:0}
+.tl-row{display:flex;gap:0;align-items:stretch}
+.tl-dot-col{display:flex;flex-direction:column;align-items:center;width:20px;flex-shrink:0}
+.tl-dot2{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:9px}
+.tl-line{width:1.5px;background:var(--cf-border);flex:1;min-height:8px}
+.tl-content{padding:5px 0 10px 9px;font-size:12.5px;color:var(--cf-ink);flex:1}
+.tl-time{font-family:'Special Elite',serif;font-size:12px;color:var(--cf-muted);display:block;margin-bottom:1px}
+.tl-event{line-height:1.55}
+.tl-sub{font-size:10.5px;color:var(--cf-muted);margin-top:2px}
+
+.redact{display:inline-block;background:var(--cf-ink);color:transparent;border-radius:2px;user-select:none}
+
+.suspect-detail{border:.5px solid var(--cf-border);border-radius:4px;padding:1rem 1.25rem;margin-bottom:1.2rem;background:#FDFCF7;page-break-inside:avoid}
+.detail-title{font-family:'Special Elite',serif;font-size:14px;color:var(--cf-ink)}
+.divider{border:none;border-top:.5px solid var(--cf-border);margin:.7rem 0}
+
+.page-footer{position:absolute;bottom:10mm;left:18mm;right:18mm;display:flex;justify-content:space-between;font-size:9px;color:var(--cf-muted);letter-spacing:.07em;border-top:.5px solid var(--cf-border);padding-top:4px}
+
+.print-bar{text-align:center;padding:10px;font-family:'Courier Prime',monospace}
+.print-btn{padding:9px 24px;font-family:'Courier Prime',monospace;font-size:13px;border:1.5px solid var(--cf-ink);border-radius:3px;background:var(--cf-ink);color:var(--cf-paper);cursor:pointer;letter-spacing:.07em}
+.print-btn:hover{background:#444}
+
+.note-box{background:var(--cf-blue-bg);border:.5px solid var(--cf-blue);border-radius:4px;padding:.6rem .9rem;font-size:11.5px;color:#0D3A6A;margin-top:.7rem;line-height:1.7}
+.redherring{background:#F5EAF7;border:.5px solid #9B4CB5;border-radius:4px;padding:.5rem .9rem;font-size:11px;color:#3C1050;margin-top:.5rem;line-height:1.65}
+.cross-ref{font-size:10px;color:var(--cf-muted);letter-spacing:.05em;margin-top:4px;font-style:italic}
+</style>
+</head>
+<body>
+    <!-- PAGE 11 — WITNESS CROSS-REFERENCE -->
+<div class="page">
+  <div class="pg-num">CF-209 — Page 11 of 14</div>
+  <div class="stamp blue">Witness Cross-Reference</div>
+  <div class="sl">Contradictions in Suspect Accounts</div>
+  <div class="body" style="margin-bottom:.6rem">The following cross-references identify specific points where two or more accounts are irreconcilable. In each case, at least one party is providing a false or materially incomplete statement. Investigators should determine which account is more credible and what the false statement is designed to conceal.</div>
+
+  <div class="suspect-detail">
+    <div class="detail-title" style="font-size:12px">Contradiction 1 — Kabir's Departure Time</div>
+    <hr class="divider">
+    <div class="row"><div class="dot d-red"></div><div><strong>Kabir's account:</strong> "I left around 12:30. I went to the parking area. I was not inside during the power cut."</div></div>
+    <div class="row"><div class="dot d-red"></div><div><strong>Witness W-1:</strong> "I saw Kabir near the indoor bar area after the lights came back on. That was definitely after 12:27. He was not outside — he was inside, near the drinks."</div></div>
+    <div class="contra">⚑ DIRECT CONTRADICTION — Both accounts cannot be true. One party is lying.</div>
+  </div>
+
+  <div class="suspect-detail">
+    <div class="detail-title" style="font-size:12px">Contradiction 2 — Aisha and Megha's Alibi</div>
+    <hr class="divider">
+    <div class="row"><div class="dot d-amber"></div><div><strong>Megha's account:</strong> "Aisha and I were on the terrace. I didn't go near him after the argument."</div></div>
+    <div class="row"><div class="dot d-amber"></div><div><strong>Aisha's account:</strong> "We went to the terrace. At some point I went inside for my bag — maybe five minutes."</div></div>
+    <div class="row"><div class="dot d-amber"></div><div><strong>Witness W-2:</strong> "I saw Megha near the kitchen corridor — the one that goes past the prep station — at some point before 1 AM. She was alone. I don't know when exactly."</div></div>
+    <div class="contra">⚑ ALIBI GAP — Each relies on the other, but both were independently unverified during part of the critical window. The kitchen corridor sighting of Megha has not been explained in her formal statement.</div>
+  </div>
+
+  <div class="suspect-detail">
+    <div class="detail-title" style="font-size:12px">Contradiction 3 — Arjun's Re-Entry</div>
+    <hr class="divider">
+    <div class="row"><div class="dot d-amber"></div><div><strong>Arjun's account:</strong> "I was outside near the parking area during the power cut. I may have stepped in briefly after, to get my jacket."</div></div>
+    <div class="row"><div class="dot d-amber"></div><div><strong>Witness W-3:</strong> "Arjun came back inside just after the lights returned. He went toward the main hall — not toward the coats near the entrance. He came back out within a few minutes."</div></div>
+    <div class="contra">⚑ DIRECTIONAL DISCREPANCY — "Getting a jacket" would require going to the entrance area. Witness places Arjun moving toward the main hall — where the drinks tray was located.</div>
+  </div>
+
+  <div class="suspect-detail">
+    <div class="detail-title" style="font-size:12px">Contradiction 4 — The Service Corridor at 11:20 PM</div>
+    <hr class="divider">
+    <div class="row"><div class="dot d-amber"></div><div><strong>Neha's account:</strong> "I was managing equipment throughout the evening. Any movement I made through service areas was routine."</div></div>
+    <div class="row"><div class="dot d-amber"></div><div><strong>Witness W-4:</strong> "I saw her go into that corridor with something — like a bag, a case maybe. She didn't come out with it. I thought it was odd at the time."</div></div>
+    <div class="row"><div class="dot d-amber"></div><div><strong>Venue Inventory Check:</strong> No equipment requiring access to the service corridor at 11:20 PM has been identified. All documented catering and AV equipment was already positioned before guest arrival.</div></div>
+    <div class="contra">⚑ UNACCOUNTED ITEM — An unidentified bag or case was brought into the service corridor and not retrieved or accounted for. No explanation has been verified. The service corridor provides direct access to the catering prep station.</div>
+  </div>
+
+  <div class="warn-note">Investigators: the contradictions above are not all of equal weight. Some represent deception about a minor embarrassment. At least one represents concealment of access to the murder weapon or its delivery mechanism. The task is to determine which contradiction is which.</div>
+  <div class="page-footer">
+    <span>CF-209 / INVESTIGATIVE DIVISION</span>
+    <span>RESTRICTED DISTRIBUTION</span>
+    <span>PAGE 11 OF 14</span>
+  </div>
+</div>
+</body>
+</html>

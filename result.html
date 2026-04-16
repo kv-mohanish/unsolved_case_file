@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>result</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cf-ink:#2C2C2A;
+  --cf-paper:#F7F5EE;
+  --cf-muted:#888780;
+  --cf-border:#C8C6BB;
+  --cf-red:#993C1D;
+  --cf-red-bg:#FAECE7;
+  --cf-red-deep:#4A1B0C;
+  --cf-amber:#854F0B;
+  --cf-amber-bg:#FAEEDA;
+  --cf-green:#3B6D11;
+  --cf-green-bg:#EAF3DE;
+  --cf-blue:#185FA5;
+  --cf-blue-bg:#E6F1FB;
+}
+
+body{background:#E8E6DF;font-family:'Courier Prime',monospace;color:var(--cf-ink)}
+
+.page{
+  width:210mm;
+  min-height:297mm;
+  background:var(--cf-paper);
+  margin:12mm auto;
+  padding:18mm 18mm 22mm;
+  box-shadow:0 4px 24px rgba(0,0,0,.18);
+  page-break-after:always;
+  position:relative;
+}
+.page:last-child{page-break-after:auto}
+
+@media print{
+  body{background:none}
+  .page{
+    margin:0;
+    box-shadow:none;
+    padding:14mm 16mm 16mm;
+    width:210mm;
+    min-height:297mm;
+    page-break-after:always;
+  }
+  .no-print{display:none!important}
+}
+
+.pg-num{font-size:10px;color:var(--cf-muted);text-align:right;margin-bottom:.4rem;letter-spacing:.08em;font-family:'Courier Prime',monospace}
+.body{font-size:12.5px;line-height:1.9;color:var(--cf-ink)}
+.italic{font-style:italic;color:var(--cf-muted)}
+
+.sl{font-size:10px;letter-spacing:.15em;color:var(--cf-muted);text-transform:uppercase;border-bottom:.5px solid var(--cf-border);padding-bottom:4px;margin:1rem 0 .55rem;font-family:'Courier Prime',monospace}
+
+.stamp{display:inline-flex;align-items:center;border:2.5px solid var(--cf-red);color:var(--cf-red);font-family:'Special Elite',serif;font-size:11px;letter-spacing:.18em;padding:3px 11px 4px;transform:rotate(-2.2deg);margin-bottom:.9rem;opacity:.82;text-transform:uppercase}
+.stamp.blue{border-color:var(--cf-blue);color:var(--cf-blue);transform:rotate(1.3deg)}
+.stamp.green{border-color:var(--cf-green);color:var(--cf-green);transform:rotate(-1deg)}
+
+.classified-bar{background:var(--cf-red);color:#FAECE7;font-family:'Special Elite',serif;font-size:10px;letter-spacing:.2em;text-align:center;padding:4px 0;margin-bottom:1rem;border-radius:2px}
+
+.header-box{border:.5px solid var(--cf-border);border-radius:4px;padding:1rem 1.25rem;margin-bottom:1.1rem;background:#FDFCF7}
+.case-id{font-family:'Special Elite',serif;font-size:20px;letter-spacing:.1em}
+.case-sub{font-family:'Special Elite',serif;font-size:13px;color:var(--cf-muted);margin-top:2px;letter-spacing:.05em}
+.meta-row{display:flex;flex-wrap:wrap;gap:1rem;margin-top:.65rem}
+.meta{font-size:11px;color:var(--cf-muted)}.meta strong{display:block;font-size:12px;font-weight:700;color:var(--cf-ink);margin-bottom:1px}
+
+.row{display:flex;gap:9px;align-items:flex-start;padding:6px 0;border-bottom:.5px solid var(--cf-border);font-size:12.5px}
+.row:last-child{border-bottom:none}
+.dot{width:7px;height:7px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.d-red{background:#993C1D}.d-amber{background:#BA7517}.d-green{background:#3B6D11}
+
+.epigraph{font-family:'Special Elite',serif;font-size:13.5px;color:var(--cf-muted);border-left:3px solid var(--cf-border);padding-left:.9rem;margin:1rem 0;font-style:italic}
+
+.tbl{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:.4rem}
+.tbl th{text-align:left;padding:5px 8px;font-size:10px;letter-spacing:.09em;color:var(--cf-muted);border-bottom:.5px solid var(--cf-border);font-weight:500}
+.tbl td{padding:7px 8px;border-bottom:.5px solid var(--cf-border);vertical-align:top;color:var(--cf-ink)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl .crit td{background:var(--cf-red-bg);color:var(--cf-red-deep)}
+
+.badge{display:inline-block;font-size:9.5px;padding:2px 6px;border-radius:2px;letter-spacing:.04em}
+.b-red{background:var(--cf-red-bg);color:var(--cf-red)}.b-amber{background:var(--cf-amber-bg);color:var(--cf-amber)}.b-green{background:var(--cf-green-bg);color:var(--cf-green)}.b-blue{background:var(--cf-blue-bg);color:var(--cf-blue)}
+
+.s-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:.5rem}
+.s-card{border:.5px solid var(--cf-border);border-radius:4px;padding:.6rem .5rem;background:#FDFCF7;text-align:center}
+.initials{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;margin:0 auto 6px}
+.s-name{font-size:12px;font-weight:500;color:var(--cf-ink)}.s-role{font-size:10px;color:var(--cf-muted);margin-top:1px}
+.s-status{font-size:9.5px;margin-top:4px;padding:2px 7px;border-radius:2px;display:inline-block;letter-spacing:.03em}
+
+.chat{background:#F2EFE8;border:.5px solid var(--cf-border);border-radius:4px;padding:.6rem .9rem;font-family:'Courier Prime',monospace;font-size:11.5px;line-height:1.9;margin-top:.4rem;color:var(--cf-muted)}
+.chat .sp{font-weight:700;color:var(--cf-ink)}.chat .hot{color:var(--cf-red)}
+
+.contra{display:inline-block;background:#FCEBEB;border:.5px solid #E24B4A;border-radius:2px;color:#501313;font-size:9.5px;padding:2px 7px;margin-top:3px;letter-spacing:.04em}
+
+.ev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:.5rem}
+.ev-card{border:.5px solid var(--cf-border);border-radius:4px;padding:.65rem;background:#FDFCF7}
+.ev-tag{font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:3px;color:var(--cf-ink)}
+.ev-desc{font-size:11px;color:var(--cf-muted);line-height:1.5}
+.ev-status{font-size:9.5px;margin-top:4px}
+
+.warn-note{background:var(--cf-amber-bg);border:.5px solid #EF9F27;border-radius:4px;padding:.5rem .9rem;font-size:11.5px;color:#412402;margin-top:.7rem}
+
+.verdict-box{border:2px solid var(--cf-red);border-radius:4px;padding:1rem 1.25rem;margin-top:.9rem;background:var(--cf-red-bg)}
+.verdict-title{font-family:'Special Elite',serif;font-size:15px;color:var(--cf-red-deep);margin-bottom:.6rem;letter-spacing:.05em}
+.v-row{display:flex;gap:9px;font-size:12px;padding:5px 0;color:var(--cf-red-deep);border-bottom:.5px solid #F0997B}
+.v-row:last-child{border-bottom:none}.v-key{font-weight:700;min-width:90px;flex-shrink:0}
+
+.fingerprint-chip{display:inline-flex;align-items:center;gap:5px;background:var(--cf-red-bg);border:.5px solid var(--cf-red);border-radius:2px;padding:3px 9px;font-size:10.5px;color:var(--cf-red);letter-spacing:.04em;margin-top:3px}
+
+.timeline-connector{display:flex;flex-direction:column;gap:0}
+.tl-row{display:flex;gap:0;align-items:stretch}
+.tl-dot-col{display:flex;flex-direction:column;align-items:center;width:20px;flex-shrink:0}
+.tl-dot2{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:9px}
+.tl-line{width:1.5px;background:var(--cf-border);flex:1;min-height:8px}
+.tl-content{padding:5px 0 10px 9px;font-size:12.5px;color:var(--cf-ink);flex:1}
+.tl-time{font-family:'Special Elite',serif;font-size:12px;color:var(--cf-muted);display:block;margin-bottom:1px}
+.tl-event{line-height:1.55}
+.tl-sub{font-size:10.5px;color:var(--cf-muted);margin-top:2px}
+
+.redact{display:inline-block;background:var(--cf-ink);color:transparent;border-radius:2px;user-select:none}
+
+.suspect-detail{border:.5px solid var(--cf-border);border-radius:4px;padding:1rem 1.25rem;margin-bottom:1.2rem;background:#FDFCF7;page-break-inside:avoid}
+.detail-title{font-family:'Special Elite',serif;font-size:14px;color:var(--cf-ink)}
+.divider{border:none;border-top:.5px solid var(--cf-border);margin:.7rem 0}
+
+.page-footer{position:absolute;bottom:10mm;left:18mm;right:18mm;display:flex;justify-content:space-between;font-size:9px;color:var(--cf-muted);letter-spacing:.07em;border-top:.5px solid var(--cf-border);padding-top:4px}
+
+.print-bar{text-align:center;padding:10px;font-family:'Courier Prime',monospace}
+.print-btn{padding:9px 24px;font-family:'Courier Prime',monospace;font-size:13px;border:1.5px solid var(--cf-ink);border-radius:3px;background:var(--cf-ink);color:var(--cf-paper);cursor:pointer;letter-spacing:.07em}
+.print-btn:hover{background:#444}
+
+.note-box{background:var(--cf-blue-bg);border:.5px solid var(--cf-blue);border-radius:4px;padding:.6rem .9rem;font-size:11.5px;color:#0D3A6A;margin-top:.7rem;line-height:1.7}
+.redherring{background:#F5EAF7;border:.5px solid #9B4CB5;border-radius:4px;padding:.5rem .9rem;font-size:11px;color:#3C1050;margin-top:.5rem;line-height:1.65}
+.cross-ref{font-size:10px;color:var(--cf-muted);letter-spacing:.05em;margin-top:4px;font-style:italic}
+</style>
+</head>
+<body>
+    <div class="page">
+    <div style="margin-top:1.5rem">
+    <div class="stamp">Confidential</div>
+    <div class="classified-bar">Final solution — authorised access only</div>
+    <div class="verdict-box">
+      <div class="verdict-title">Final Verdict — CF-209</div>
+      <div class="v-row"><span class="v-key">Perpetrator</span><span>Neha — Event Organiser</span></div>
+      <div class="v-row"><span class="v-key">Method</span><span>Toxic compound introduced into the victim's glass during the 12:30 AM service window — administered personally by Neha, under the legitimate cover of her organiser role</span></div>
+      <div class="v-row"><span class="v-key">Motive</span><span>Blackmail — Rohan held sensitive information about Neha (a financial irregularity connected to her academic record — falsified scholarship documentation) and had set a disclosure deadline for the morning of 15th March. She acted that night to prevent it permanently.</span></div>
+      <div class="v-row"><span class="v-key">Preparation</span><span>Compound acquired 4–5 days before the gathering via a contact in a chemistry postgraduate programme (not among the five suspects). The 11:20 PM service corridor entry was when she retrieved the pre-prepared concentrated dose from her bag and prepared the delivery vehicle. The power outage — whether engineered or exploited — provided the cover to finalise preparation without observation.</span></div>
+      <div class="v-row"><span class="v-key">Confirming Evidence</span><span>Fingerprint on victim's glass (match: Neha) + 12:32 AM photograph (Neha near drinks tray) + 12:06 AM message + service corridor bag + forensic compound access profile</span></div>
+    </div>
+
+    <div class="sl">Execution — Step by Step</div>
+    <div class="row"><div class="dot d-red"></div><div><strong>4–5 days prior:</strong> Neha acquires the compound through an external contact. This is not impulsive — she has been considering it since Day 4 of the recovered message thread, when Rohan first made the threat explicit.</div></div>
+    <div class="row"><div class="dot d-red"></div><div><strong>11:20 PM:</strong> Under cover of her organiser role, Neha enters the service corridor with a bag containing the prepared compound. She leaves the bag — or its contents — in a pre-arranged location inside the corridor, accessible during the service window without raising suspicion. She exits without it.</div></div>
+    <div class="row"><div class="dot d-red"></div><div><strong>12:05 AM:</strong> Rohan sends the final threat — "my patience ends tomorrow morning." Neha's reply at 12:06 AM — "I understand exactly what I need to do" — is a statement of confirmed intent, not compliance. Within minutes, she deletes the entire thread from her device.</div></div>
+    <div class="row"><div class="dot d-red"></div><div><strong>12:20 AM:</strong> Power outage. Whether Neha engineered it or recognised it as an opportunity, she uses the 6–7 unmonitored minutes to retrieve the prepared dose and introduce it into the specific glass she has already identified as the victim's. She knows the event layout. She knows where his drink will be. This is her job.</div></div>
+    <div class="row"><div class="dot d-red"></div><div><strong>12:30 AM:</strong> Drinks are distributed. Neha personally carries the tray — captured at 12:32 AM in Photograph B — ensuring she controls which glass goes to Rohan. She hands it to him or places it within his reach. The fingerprint on the outer surface of his glass is hers.</div></div>
+    <div class="row"><div class="dot d-red"></div><div><strong>Post-event:</strong> Composed behaviour throughout. No visible reaction to the discovery at 2:10 AM beyond appropriate concern. Formal statement is technically careful — she says she did not "specifically hand anything to Rohan." This is a deliberate construction, not a denial.</div></div>
+
+    <div class="sl">Red Herring Explanations (For Organiser Reference)</div>
+    <div class="row"><div class="dot d-amber"></div><div><strong>Kabir's disputed departure:</strong> He was inside the villa near the bar — that part is true. He was looking for his phone, which he had left on a side table. He lied about his departure time because he did not want to explain why he had gone back in after the argument. He had nothing to do with the drink. His "morning" message refers to his plan to confront Rohan legally the next day.</div></div>
+    <div class="row"><div class="dot d-amber"></div><div><strong>Megha's kitchen corridor presence:</strong> She went to get water — a simple, true explanation she did not volunteer because she was embarrassed about how close she came to confronting Rohan again that night. The message "I've already done what I needed to do" refers to having told Aisha the full truth about Rohan's behaviour — something she had been withholding for weeks.</div></div>
+    <div class="row"><div class="dot d-amber"></div><div><strong>Arjun's re-entry and the 11-second call:</strong> The call was to his girlfriend — he had been ignoring her messages all night. The 11-second duration is because she didn't pick up. He re-entered the villa heading toward the main hall because he thought he'd left his jacket on a chair near the bar area, not near the coats. Neither fact implicates him. He is lying to avoid admitting he had been on the phone during a night he said he was "handling things professionally."</div></div>
+    <div class="row"><div class="dot d-amber"></div><div><strong>Aisha's "someone else" remark:</strong> She was afraid Rohan would expose Kabir's financial situation — he owed Rohan money and had not disclosed this to others. She was protecting Kabir's reputation, not covering for a murder. Her bag-retrieval gap is genuine and innocent — she simply doesn't remember the exact timing and didn't want to say so.</div></div>
+
+    <div class="sl">Suggested Reveal Script (Organiser)</div>
+    <div class="chat" style="line-height:1.85">"We went through every statement, every gap, every piece of evidence — and what we found is that almost everyone in that room was hiding something. Kabir lied about when he left. Megha didn't mention she'd been near the kitchen. Arjun can't explain a phone call or which direction he walked. Aisha admitted she was afraid — for someone else. Each of them had a reason. None of them killed him.<br><br>The person who killed Rohan Verma was the one person in that room whose entire purpose was to be everywhere — and to make that seem completely normal.<br><br>The fingerprint on his glass. The photograph at 12:32. The bag that went into the service corridor and never came back out. The message at 12:06 that says 'I understand exactly what I need to do' — sent two minutes before she deleted eleven days of evidence.<br><br>Neha didn't lose control that night. She executed a plan she had been building for days. And she nearly got away with it — because the thing that makes a killer invisible in a room full of people is being the person everyone expects to be there."</div>
+    <div class="epigraph" style="margin-top:1.2rem">"The most dangerous person in the room is the one whose presence no one questions."</div>
+  </div>
+  <div class="page-footer">
+    <span>CF-209 / INVESTIGATIVE DIVISION</span>
+    <span>CONFIDENTIAL — ORGANISER ONLY</span>
+    <span>PAGE 14 OF 14</span>
+  </div>
+  </div>
+</div>
+</body>
+</html>

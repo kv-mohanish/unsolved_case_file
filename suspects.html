@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suspects</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cf-ink:#2C2C2A;
+  --cf-paper:#F7F5EE;
+  --cf-muted:#888780;
+  --cf-border:#C8C6BB;
+  --cf-red:#993C1D;
+  --cf-red-bg:#FAECE7;
+  --cf-red-deep:#4A1B0C;
+  --cf-amber:#854F0B;
+  --cf-amber-bg:#FAEEDA;
+  --cf-green:#3B6D11;
+  --cf-green-bg:#EAF3DE;
+  --cf-blue:#185FA5;
+  --cf-blue-bg:#E6F1FB;
+}
+
+body{background:#E8E6DF;font-family:'Courier Prime',monospace;color:var(--cf-ink)}
+
+.page{
+  width:210mm;
+  min-height:297mm;
+  background:var(--cf-paper);
+  margin:12mm auto;
+  padding:18mm 18mm 22mm;
+  box-shadow:0 4px 24px rgba(0,0,0,.18);
+  page-break-after:always;
+  position:relative;
+}
+.page:last-child{page-break-after:auto}
+
+@media print{
+  body{background:none}
+  .page{
+    margin:0;
+    box-shadow:none;
+    padding:14mm 16mm 16mm;
+    width:210mm;
+    min-height:297mm;
+    page-break-after:always;
+  }
+  .no-print{display:none!important}
+}
+
+.pg-num{font-size:10px;color:var(--cf-muted);text-align:right;margin-bottom:.4rem;letter-spacing:.08em;font-family:'Courier Prime',monospace}
+.body{font-size:12.5px;line-height:1.9;color:var(--cf-ink)}
+.italic{font-style:italic;color:var(--cf-muted)}
+
+.sl{font-size:10px;letter-spacing:.15em;color:var(--cf-muted);text-transform:uppercase;border-bottom:.5px solid var(--cf-border);padding-bottom:4px;margin:1rem 0 .55rem;font-family:'Courier Prime',monospace}
+
+.stamp{display:inline-flex;align-items:center;border:2.5px solid var(--cf-red);color:var(--cf-red);font-family:'Special Elite',serif;font-size:11px;letter-spacing:.18em;padding:3px 11px 4px;transform:rotate(-2.2deg);margin-bottom:.9rem;opacity:.82;text-transform:uppercase}
+.stamp.blue{border-color:var(--cf-blue);color:var(--cf-blue);transform:rotate(1.3deg)}
+.stamp.green{border-color:var(--cf-green);color:var(--cf-green);transform:rotate(-1deg)}
+
+.classified-bar{background:var(--cf-red);color:#FAECE7;font-family:'Special Elite',serif;font-size:10px;letter-spacing:.2em;text-align:center;padding:4px 0;margin-bottom:1rem;border-radius:2px}
+
+.header-box{border:.5px solid var(--cf-border);border-radius:4px;padding:1rem 1.25rem;margin-bottom:1.1rem;background:#FDFCF7}
+.case-id{font-family:'Special Elite',serif;font-size:20px;letter-spacing:.1em}
+.case-sub{font-family:'Special Elite',serif;font-size:13px;color:var(--cf-muted);margin-top:2px;letter-spacing:.05em}
+.meta-row{display:flex;flex-wrap:wrap;gap:1rem;margin-top:.65rem}
+.meta{font-size:11px;color:var(--cf-muted)}.meta strong{display:block;font-size:12px;font-weight:700;color:var(--cf-ink);margin-bottom:1px}
+
+.row{display:flex;gap:9px;align-items:flex-start;padding:6px 0;border-bottom:.5px solid var(--cf-border);font-size:12.5px}
+.row:last-child{border-bottom:none}
+.dot{width:7px;height:7px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.d-red{background:#993C1D}.d-amber{background:#BA7517}.d-green{background:#3B6D11}
+
+.epigraph{font-family:'Special Elite',serif;font-size:13.5px;color:var(--cf-muted);border-left:3px solid var(--cf-border);padding-left:.9rem;margin:1rem 0;font-style:italic}
+
+.tbl{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:.4rem}
+.tbl th{text-align:left;padding:5px 8px;font-size:10px;letter-spacing:.09em;color:var(--cf-muted);border-bottom:.5px solid var(--cf-border);font-weight:500}
+.tbl td{padding:7px 8px;border-bottom:.5px solid var(--cf-border);vertical-align:top;color:var(--cf-ink)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl .crit td{background:var(--cf-red-bg);color:var(--cf-red-deep)}
+
+.badge{display:inline-block;font-size:9.5px;padding:2px 6px;border-radius:2px;letter-spacing:.04em}
+.b-red{background:var(--cf-red-bg);color:var(--cf-red)}.b-amber{background:var(--cf-amber-bg);color:var(--cf-amber)}.b-green{background:var(--cf-green-bg);color:var(--cf-green)}.b-blue{background:var(--cf-blue-bg);color:var(--cf-blue)}
+
+.s-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:.5rem}
+.s-card{border:.5px solid var(--cf-border);border-radius:4px;padding:.6rem .5rem;background:#FDFCF7;text-align:center}
+.initials{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;margin:0 auto 6px}
+.s-name{font-size:12px;font-weight:500;color:var(--cf-ink)}.s-role{font-size:10px;color:var(--cf-muted);margin-top:1px}
+.s-status{font-size:9.5px;margin-top:4px;padding:2px 7px;border-radius:2px;display:inline-block;letter-spacing:.03em}
+
+.chat{background:#F2EFE8;border:.5px solid var(--cf-border);border-radius:4px;padding:.6rem .9rem;font-family:'Courier Prime',monospace;font-size:11.5px;line-height:1.9;margin-top:.4rem;color:var(--cf-muted)}
+.chat .sp{font-weight:700;color:var(--cf-ink)}.chat .hot{color:var(--cf-red)}
+
+.contra{display:inline-block;background:#FCEBEB;border:.5px solid #E24B4A;border-radius:2px;color:#501313;font-size:9.5px;padding:2px 7px;margin-top:3px;letter-spacing:.04em}
+
+.ev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:.5rem}
+.ev-card{border:.5px solid var(--cf-border);border-radius:4px;padding:.65rem;background:#FDFCF7}
+.ev-tag{font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:3px;color:var(--cf-ink)}
+.ev-desc{font-size:11px;color:var(--cf-muted);line-height:1.5}
+.ev-status{font-size:9.5px;margin-top:4px}
+
+.warn-note{background:var(--cf-amber-bg);border:.5px solid #EF9F27;border-radius:4px;padding:.5rem .9rem;font-size:11.5px;color:#412402;margin-top:.7rem}
+
+.verdict-box{border:2px solid var(--cf-red);border-radius:4px;padding:1rem 1.25rem;margin-top:.9rem;background:var(--cf-red-bg)}
+.verdict-title{font-family:'Special Elite',serif;font-size:15px;color:var(--cf-red-deep);margin-bottom:.6rem;letter-spacing:.05em}
+.v-row{display:flex;gap:9px;font-size:12px;padding:5px 0;color:var(--cf-red-deep);border-bottom:.5px solid #F0997B}
+.v-row:last-child{border-bottom:none}.v-key{font-weight:700;min-width:90px;flex-shrink:0}
+
+.fingerprint-chip{display:inline-flex;align-items:center;gap:5px;background:var(--cf-red-bg);border:.5px solid var(--cf-red);border-radius:2px;padding:3px 9px;font-size:10.5px;color:var(--cf-red);letter-spacing:.04em;margin-top:3px}
+
+.timeline-connector{display:flex;flex-direction:column;gap:0}
+.tl-row{display:flex;gap:0;align-items:stretch}
+.tl-dot-col{display:flex;flex-direction:column;align-items:center;width:20px;flex-shrink:0}
+.tl-dot2{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:9px}
+.tl-line{width:1.5px;background:var(--cf-border);flex:1;min-height:8px}
+.tl-content{padding:5px 0 10px 9px;font-size:12.5px;color:var(--cf-ink);flex:1}
+.tl-time{font-family:'Special Elite',serif;font-size:12px;color:var(--cf-muted);display:block;margin-bottom:1px}
+.tl-event{line-height:1.55}
+.tl-sub{font-size:10.5px;color:var(--cf-muted);margin-top:2px}
+
+.redact{display:inline-block;background:var(--cf-ink);color:transparent;border-radius:2px;user-select:none}
+
+.suspect-detail{border:.5px solid var(--cf-border);border-radius:4px;padding:1rem 1.25rem;margin-bottom:1.2rem;background:#FDFCF7;page-break-inside:avoid}
+.detail-title{font-family:'Special Elite',serif;font-size:14px;color:var(--cf-ink)}
+.divider{border:none;border-top:.5px solid var(--cf-border);margin:.7rem 0}
+
+.page-footer{position:absolute;bottom:10mm;left:18mm;right:18mm;display:flex;justify-content:space-between;font-size:9px;color:var(--cf-muted);letter-spacing:.07em;border-top:.5px solid var(--cf-border);padding-top:4px}
+
+.print-bar{text-align:center;padding:10px;font-family:'Courier Prime',monospace}
+.print-btn{padding:9px 24px;font-family:'Courier Prime',monospace;font-size:13px;border:1.5px solid var(--cf-ink);border-radius:3px;background:var(--cf-ink);color:var(--cf-paper);cursor:pointer;letter-spacing:.07em}
+.print-btn:hover{background:#444}
+
+.note-box{background:var(--cf-blue-bg);border:.5px solid var(--cf-blue);border-radius:4px;padding:.6rem .9rem;font-size:11.5px;color:#0D3A6A;margin-top:.7rem;line-height:1.7}
+.redherring{background:#F5EAF7;border:.5px solid #9B4CB5;border-radius:4px;padding:.5rem .9rem;font-size:11px;color:#3C1050;margin-top:.5rem;line-height:1.65}
+.cross-ref{font-size:10px;color:var(--cf-muted);letter-spacing:.05em;margin-top:4px;font-style:italic}
+</style>
+</head>
+<body>
+    <!-- PAGE 5 — SUSPECT OVERVIEW -->
+<div class="page">
+  <div class="pg-num">CF-209 — Page 5 of 14</div>
+  <div class="stamp">Suspect Profiles</div>
+  <div class="sl">Overview — Five Primary Suspects</div>
+  <div class="s-grid" style="margin-bottom:1rem">
+    <div class="s-card"><div class="initials" style="background:#E6F1FB;color:#185FA5">AI</div><div class="s-name">Aisha</div><div class="s-role">Best Friend</div><div class="s-status b-amber">Alibi: Gap noted</div></div>
+    <div class="s-card"><div class="initials" style="background:#FAEEDA;color:#854F0B">KA</div><div class="s-name">Kabir</div><div class="s-role">Business Partner</div><div class="s-status b-red">Alibi: Disputed</div></div>
+    <div class="s-card"><div class="initials" style="background:#FBEAF0;color:#993556">ME</div><div class="s-name">Megha</div><div class="s-role">Ex-Girlfriend</div><div class="s-status b-amber">Alibi: Partial</div></div>
+    <div class="s-card"><div class="initials" style="background:#E1F5EE;color:#0F6E56">AR</div><div class="s-name">Arjun</div><div class="s-role">Junior Rival</div><div class="s-status b-amber">Alibi: Partial</div></div>
+    <div class="s-card"><div class="initials" style="background:#FAEEDA;color:#854F0B">NE</div><div class="s-name">Neha</div><div class="s-role">Event Organiser</div><div class="s-status b-amber">Under review</div></div>
+  </div>
+  <div class="body" style="margin-bottom:.8rem">All five individuals had documented exposure to Rohan's manipulative and threatening behaviour. All five had reason — financial, personal, professional, or existential — to want the escalating situation brought to a halt. The investigation must distinguish between those who felt threatened and those who acted on it. Not all guilty behaviour is the guilt of murder. Read each profile carefully — and cross-reference against the evidence log.</div>
+
+  <!-- AISHA -->
+  <div class="suspect-detail">
+    <div class="detail-title">Aisha — Best Friend / Confidant</div>
+    <hr class="divider">
+    <div class="sl">Relationship to Victim</div>
+    <div class="body">Aisha had been Rohan's closest confidant for over three years. She was the person he called first, confided in most, and — crucially — the person who knew the most about his methods and his material. She was privy to his collection of private information on others. She knew who he was threatening, and roughly what he held. In the weeks before the gathering, that knowledge had become a source of visible distress. Two mutual acquaintances independently report that she had begun to express regret — saying she was "done protecting him" and that "it had gone too far."<br><br>What those statements mean in the context of his death is a question the investigation has not yet resolved.</div>
+    <div class="sl">Profile</div>
+    <div class="row"><div class="dot d-red"></div><div>Holds extensive knowledge of the victim's blackmail material — including details pertaining to other suspects. This knowledge could itself be a motive: she may have acted to protect someone else, or to prevent information she did not want disclosed from reaching Rohan's intended audience.</div></div>
+    <div class="row"><div class="dot d-red"></div><div>Digital records suggest a communication exchange with Rohan on 12th March — two days before the party — in which Rohan allegedly told her: "You'll thank me for this." She did not respond. The significance of that message remains unclear.</div></div>
+    <div class="row"><div class="dot d-amber"></div><div>Confirmed present from start to finish. Departure time is unrecorded. No guest log captures her exit.</div></div>
+    <div class="row"><div class="dot d-amber"></div><div>Statement contains a gap: Megha confirms they were together on the terrace after the argument — but Aisha herself admits she returned inside briefly to retrieve her bag. Duration of absence: unspecified. Location during absence: unverified. The timing of that gap overlaps with the 12:20–12:30 AM critical window.</div></div>
+    <div class="sl">Formal Statement</div>
+    <div class="body">"I've known Rohan longer than anyone here. I knew his flaws. I also knew that what he was doing — to Kabir, to Megha, to the others — had escalated beyond anything I was comfortable with. That night, I stayed close to Megha after the argument. She needed someone. We went to the terrace. At some point I went inside briefly for my bag — maybe five minutes. I went back to the terrace. I didn't go near the drinks service. I did not hurt him.<br><br>But I want to be honest: I was afraid of what he was going to do in the morning. Not for myself. For someone else. I won't say who. That's the truth."</div>
+    <div class="sl">Extracted Communication — 12th March</div>
+    <div class="chat"><span class="sp">Rohan:</span> You know everything I know. Don't forget that cuts both ways.<br><span class="sp">Aisha:</span> What does that mean?<br><span class="sp">Rohan:</span> It means you'll thank me for this.<br><span class="sp">[No reply from Aisha]</span></div>
+    <div class="sl">Investigator Assessment</div>
+    <div class="row"><div class="dot d-amber"></div><div>Strong circumstantial motivation — not personal, but protective. She may have acted to shield another person from exposure. This is a motive that is difficult to measure but difficult to dismiss.</div></div>
+    <div class="row"><div class="dot d-amber"></div><div>The "bag retrieval" gap in her alibi is the only window in which her location is unverified. It overlaps with the critical 12:20–12:30 AM interval. Duration is unspecified and uncorroborated.</div></div>
+    <div class="row"><div class="dot d-green"></div><div>No physical evidence recovered linking her to the victim's drink or the preparation area.</div></div>
+    <div class="note-box">⚠ Cross-reference: Aisha claims to have been "afraid for someone else." The identity of that person has not been confirmed. Compare against Kabir's profile and the timeline gap at 11:00 PM.</div>
+  </div>
+  <div class="page-footer">
+    <span>CF-209 / INVESTIGATIVE DIVISION</span>
+    <span>RESTRICTED DISTRIBUTION</span>
+    <span>PAGE 5 OF 14</span>
+  </div>
+</div>
+
+<!-- PAGE 6 — KABIR -->
+<div class="page">
+  <div class="pg-num">CF-209 — Page 6 of 14</div>
+
+  <div class="suspect-detail">
+    <div class="detail-title">Kabir — Business Partner / Co-Founder</div>
+    <hr class="divider">
+    <div class="sl">Relationship to Victim</div>
+    <div class="body">Kabir co-founded a student startup venture with Rohan approximately eight months before the incident. By the time of the gathering, the relationship had deteriorated into something closer to a trap than a partnership. Rohan had, without consultation or documentation, unilaterally redirected equity allocation and systematically excluded Kabir from key decisions. Three weeks before the party, Rohan informed Kabir — verbally, with no witnesses — that he was being removed from the venture entirely. No formal paperwork. No acknowledgment of contribution. No recourse.<br><br>On the night of the gathering, Rohan escalated: in the 11:00 PM conversation near the terrace, he reportedly confirmed the removal was already done and added that he intended to file for full intellectual property rights over work they had jointly developed. Kabir stood to lose months of unpaid effort, a meaningful equity stake, and any professional credibility the venture had provided him. His motive is not abstract. It is documented and concrete.</div>
+    <div class="sl">Profile</div>
+    <div class="row"><div class="dot d-red"></div><div>Strong financial and professional motive — the 11:00 PM confrontation near the terrace was witnessed, confirming the provocation was delivered at close range, on the night, with full intentionality on Rohan's part</div></div>
+    <div class="row"><div class="dot d-red"></div><div>Stated departure time of 12:30 AM is directly disputed by a witness who places him inside the villa near the bar area after the power was restored — well after 12:27 AM. His own account cannot reconcile this placement.</div></div>
+    <div class="row"><div class="dot d-red"></div><div>A search of the deleted message thread reveals a communication from Kabir — sent on 13th March, the night before the gathering — that reads: "If you go through with this tomorrow, you won't have to worry about the morning." He claims this was a bluff. It is the only direct pre-event statement with a temporal reference to "tomorrow morning."</div></div>
+    <div class="row"><div class="dot d-amber"></div><div>His account of the power outage places him outside near the parking area — but the same witness who disputes his departure time also disputes this location. The two accounts cannot both be true.</div></div>
+    <div class="sl">Formal Statement</div>
+    <div class="body">"What Rohan did was systematic. He didn't just push me out — he waited until he needed me the least and then used everything I'd built as leverage. That conversation at 11:00 PM confirmed what I'd already been told. He was taking everything.<br><br>After the cake cutting, I couldn't stay. I left around 12:30. I went to the parking area to get some air and then drove home. I was not inside during the power cut. I was not anywhere near the drinks. I didn't go back in after I left.<br><br>That message I sent the night before — that was frustration. I was venting. Anyone who's been pushed that far has said something like that. It doesn't mean what they're suggesting it means."</div>
+    <div class="sl">Extracted Communications</div>
+    <div class="chat"><span class="sp">Kabir (13th March, 11:47 PM):</span> If you go through with this tomorrow, you won't have to worry about the morning.<br><span class="sp">Rohan:</span> That almost sounds like a threat.<br><span class="sp">Kabir:</span> Take it however you want.<br><br><span class="sp">Kabir (14th March, 11:58 PM — 2 min before midnight):</span> You think you've already won. You haven't.<br><span class="sp">Rohan:</span> By tomorrow I will have.</div>
+    <div class="sl">Investigator Assessment</div>
+    <div class="row"><div class="dot d-red"></div><div>Documented pre-event threat referencing "tomorrow morning" — the same temporal frame Rohan used in his threatening message at 12:05 AM. The convergence of this language is significant and has not been adequately explained.</div></div>
+    <div class="row"><div class="dot d-red"></div><div>Stated departure at 12:30 AM contradicted by a witness who places him inside the villa near the bar area post-outage. Two irreconcilable accounts. One is false.</div></div>
+    <div class="row"><div class="dot d-amber"></div><div>No physical evidence currently links him to the victim's drink — however, the partial compromise of the bar area before forensic collection means this absence is not conclusive.</div></div>
+    <div class="note-box">⚠ Cross-reference: Kabir's communication at 11:58 PM — "By tomorrow I will have" (Rohan's reply) — places the motive deadline at dawn on 15th March. Compare against Neha's 12:06 AM reply and the digital evidence timeline on page 10.</div>
+  </div>
+  <div class="page-footer">
+    <span>CF-209 / INVESTIGATIVE DIVISION</span>
+    <span>RESTRICTED DISTRIBUTION</span>
+    <span>PAGE 6 OF 14</span>
+  </div>
+</div>
+
+<!-- PAGE 7 — MEGHA -->
+<div class="page">
+  <div class="pg-num">CF-209 — Page 7 of 14</div>
+
+  <div class="suspect-detail">
+    <div class="detail-title">Megha — Ex-Girlfriend</div>
+    <hr class="divider">
+    <div class="sl">Relationship to Victim</div>
+    <div class="body">Megha and Rohan ended a two-year relationship approximately three months before the incident. The breakup was not mutual. Rohan ended the relationship abruptly and publicly — via a message sent to a shared group chat — citing "irreconcilable differences in values." Those in the group understood the phrasing as a deliberate humiliation.<br><br>In the months that followed, Megha's presence in shared social spaces became a source of visible discomfort for both parties — but the discomfort, according to those around them, was not simply grief. Rohan had, in the course of their relationship, obtained private information — the exact nature of which has not been confirmed — that he had since used to discourage Megha from "causing problems." The threat was implicit but understood. Her attendance at the gathering — which she was invited to by Aisha, not Rohan — is described by several guests as either brave or reckless. The argument at 11:45 PM was not accidental. It appears to have been Rohan's response to her presence.</div>
+    <div class="sl">Profile</div>
+    <div class="row"><div class="dot d-red"></div><div>Publicly threatened the victim at 11:45 PM — the statement "You'll regret this" was overheard by all attendees. She does not deny making it. What remains contested is the intent behind it.</div></div>
+    <div class="row"><div class="dot d-red"></div><div>A witness reports seeing Megha near the kitchen corridor — an area adjacent to the service prep station — at an unspecified time before 1:00 AM. She does not account for this in her statement. When pressed, she says she "may have gone to get water." The kitchen corridor is the same route used to access the service prep area.</div></div>
+    <div class="row"><div class="dot d-amber"></div><div>Her alibi for the critical window depends almost entirely on corroboration from Aisha — but Aisha's own statement contains a gap period during which she was not on the terrace. Their alibis are mutually dependent but individually incomplete.</div></div>
+    <div class="row"><div class="dot d-amber"></div><div>A communication recovered from Megha's device — sent on 13th March — reads: "I know what you're planning. Do what you want. I've already done what I needed to do." The nature of what she had "already done" is unexplained and unverified.</div></div>
+    <div class="sl">Formal Statement</div>
+    <div class="body">"The argument was not something I started. Rohan wanted it to happen. He wanted people to see me react. That's what he does — did. He uses public settings to strip away your control.<br><br>After that, I didn't trust myself near him. Aisha took me outside. We were on the terrace. I was there, more or less, until things started winding down. I may have gone inside briefly at some point for water. I don't remember the exact timing.<br><br>What I said in the argument — yes, I meant he would regret what he'd done to me. Not that I would do something. I was furious. I am furious. But there is a distance between being furious at someone and poisoning them."</div>
+    <div class="sl">Extracted Communication — 13th March</div>
+    <div class="chat"><span class="sp">Megha:</span> I know what you're planning. Do what you want. I've already done what I needed to do.<br><span class="sp">Rohan:</span> And what was that?<br><span class="sp">Megha:</span> You'll find out. Or you won't.</div>
+    <div class="sl">Investigator Assessment</div>
+    <div class="row"><div class="dot d-red"></div><div>The 13th March message — "I've already done what I needed to do" — is the most ambiguous statement in the digital record. It implies prior action, not future intent. The timing makes it a potential reference to preparation. No explanation has been provided.</div></div>
+    <div class="row"><div class="dot d-amber"></div><div>Placement near the kitchen corridor is unaccounted for in her formal statement. When mentioned, she offers a casual explanation that was not volunteered and cannot be independently verified.</div></div>
+    <div class="row"><div class="dot d-green"></div><div>No physical evidence currently recovered linking her to the victim's glass or drink preparation area.</div></div>
+    <div class="redherring">⚠ Investigator Note: The public threat at 11:45 PM is loud and attributable — which makes it an unlikely choice for someone planning a covert act. High-visibility behaviour immediately before a killing is either impulsive or deliberate misdirection. Neither conclusion eliminates her from suspicion.</div>
+  </div>
+  <div class="page-footer">
+    <span>CF-209 / INVESTIGATIVE DIVISION</span>
+    <span>RESTRICTED DISTRIBUTION</span>
+    <span>PAGE 7 OF 14</span>
+  </div>
+</div>
+
+<!-- PAGE 8 — ARJUN -->
+<div class="page">
+  <div class="pg-num">CF-209 — Page 8 of 14</div>
+
+  <div class="suspect-detail">
+    <div class="detail-title">Arjun — Junior Rival / Academic Competitor</div>
+    <hr class="divider">
+    <div class="sl">Relationship to Victim</div>
+    <div class="body">Arjun's relationship with Rohan was defined by a sustained campaign of professional interference. Rohan had, over the course of the academic year, used his superior social network to block Arjun from two competitive opportunities: a prestigious industry internship and an academic exchange placement. In both cases, Rohan used informal back-channel communications — not formal obstruction — to undercut Arjun's candidacy. The pattern was only identified in retrospect, when Arjun received separate anonymous tips pointing to Rohan as the source.<br><br>Beyond the professional, there is a personal dimension that has surfaced during investigation: a private matter — the specifics of which are sealed — that Rohan reportedly held over Arjun, and which he had threatened to disclose publicly if Arjun "made noise." Arjun denies that this threat constitutes a motive. Investigators note that denying the existence of a threat is not the same as being unaffected by one.</div>
+    <div class="sl">Profile</div>
+    <div class="row"><div class="dot d-amber"></div><div>Suffered documented, concrete professional harm attributable directly to the victim — lost two opportunities as a result of Rohan's interference, with financial and career implications</div></div>
+    <div class="row"><div class="dot d-red"></div><div>A private threat — the content of which remains sealed — was issued to Arjun in the week before the gathering. He confirms he received it but describes it as "irrelevant to what happened." This assessment is inconsistent with how the threat was described by a mutual contact.</div></div>
+    <div class="row"><div class="dot d-amber"></div><div>Positioned himself outside the villa for most of the evening — confirmed by two witnesses near the parking area. However, the same witnesses differ on whether he was outside continuously or re-entered at some point. One states he "went back inside briefly just after the lights came back on."</div></div>
+    <div class="row"><div class="dot d-amber"></div><div>Made a phone call at 12:19 AM — one minute before the power outage began. The call lasted eleven seconds. The recipient has not been identified. He claims he cannot remember who he called.</div></div>
+    <div class="sl">Formal Statement</div>
+    <div class="body">"Rohan took things that should have been mine. I won't pretend that doesn't matter. It matters a great deal. But mattering isn't acting. I'd decided, before that night, that I wasn't going to engage with him any further. Legal avenues, not personal ones.<br><br>That night I stayed outside. Near the parking. I made calls. I was there when the lights went out — you can ask the people near me. I didn't go inside during the blackout. I may have stepped in briefly after, to get my jacket. Five minutes, maybe less. I didn't go near the drinks area.<br><br>Whatever he was holding over me — it doesn't matter now. And it didn't make me kill him."</div>
+    <div class="sl">Extracted Communication</div>
+    <div class="chat"><span class="sp">Arjun:</span> You took what should have been mine. Both times.<br><span class="sp">Rohan:</span> You were never going to get them anyway. I just made it faster.<br><span class="sp">Arjun:</span> I know what you did. And I know why.<br><span class="sp">Rohan:</span> Then you know not to push this.<br><span class="sp">Arjun:</span> This isn't over.<br><span class="sp">Rohan:</span> For you, it is.</div>
+    <div class="sl">Investigator Assessment</div>
+    <div class="row"><div class="dot d-amber"></div><div>Credible motive — professional and personal. His claim that he had "moved on to legal avenues" is plausible, but no evidence of any formal legal activity has been identified prior to the gathering.</div></div>
+    <div class="row"><div class="dot d-amber"></div><div>Witness accounts on his outdoor positioning are inconsistent — one places him inside the villa after the lights returned. His own account allows for a brief re-entry. "Getting a jacket" is unverifiable and the timing coincides with the critical window.</div></div>
+    <div class="row"><div class="dot d-red"></div><div>The 11-second phone call at 12:19 AM — one minute before the outage — is unexplained. An 11-second call is either a wrong number, a dropped call, or a signal. He claims not to remember who he called. Call records show the receiving number is registered to a prepaid device that has since been disconnected.</div></div>
+    <div class="redherring">⚠ Investigator Note: The sealed personal threat Rohan held over Arjun has not been disclosed to investigators. The sealed status was requested by a third party. The identity of that third party is under review. This sealed information may be directly relevant to motive.</div>
+  </div>
+  <div class="page-footer">
+    <span>CF-209 / INVESTIGATIVE DIVISION</span>
+    <span>RESTRICTED DISTRIBUTION</span>
+    <span>PAGE 8 OF 14</span>
+  </div>
+</div>
+
+<!-- PAGE 9 — NEHA -->
+<div class="page">
+  <div class="pg-num">CF-209 — Page 9 of 14</div>
+
+  <div class="suspect-detail">
+    <div class="detail-title">Neha — Event Organiser</div>
+    <hr class="divider">
+    <div class="sl">Relationship to Victim</div>
+    <div class="body">Neha was entrusted with organising the entire gathering — logistics, guest coordination, catering management, and venue operations. Her role gave her unrestricted and unquestioned access to every area of Wisteria Villa throughout the evening. She was present at every key moment, had advance knowledge of the event schedule and layout, and was the only individual whose presence near service areas, preparation zones, and the drinks station would not attract attention or require explanation.<br><br>What her relationship with Rohan actually was is less clear than her role suggests. Publicly, they were acquaintances — he had hired her to organise the event. Privately, the forensically recovered communications paint a different picture: a sustained, escalating exchange in which Rohan used what he knew about Neha against her. The exact nature of what he held — the specific information he threatened to disclose — has been partially reconstructed but is sealed pending a concurrent investigation. What is confirmed: it was sufficient to provoke eleven days of increasingly panicked responses from Neha, culminating in the deletion of the entire thread from both devices within sixty minutes of the final message.</div>
+    <div class="sl">Profile</div>
+    <div class="row"><div class="dot d-amber"></div><div>Role as event organiser gave her legitimate, unrestricted access to all areas — including the service corridor, the catering preparation area, and the drinks station. This access was routine and would not have triggered suspicion from any other attendee.</div></div>
+    <div class="row"><div class="dot d-red"></div><div>Observed entering the service corridor at 11:20 PM with an unidentified bag or case — exiting approximately eight minutes later without it. She was not asked about this in her initial statement. When subsequently questioned, she described it as "equipment check." No equipment requiring such access has been identified.</div></div>
+    <div class="row"><div class="dot d-red"></div><div>Received a direct threat from the victim at 12:05 AM — referencing public exposure "first thing tomorrow morning." Her reply at 12:06 AM — "I understand exactly what I need to do" — is the most consequential phrase in the digital record when read against the totality of the evidence.</div></div>
+    <div class="row"><div class="dot d-red"></div><div>A photograph timestamped 12:32 AM places a partially visible individual near the drinks tray in the main hall. The figure's posture, clothing detail, and positioning are consistent with — though not conclusively identified as — Neha. A witness independently describes seeing "the organiser-type woman" near the drinks after the lights came back on.</div></div>
+    <div class="row"><div class="dot d-amber"></div><div>Demeanour throughout the evening described as composed and unaffected — even during and after the argument between Rohan and Megha. Multiple witnesses describe her as the "calmest person in the room." This observation cuts both ways.</div></div>
+    <div class="sl">Formal Statement</div>
+    <div class="body">"I was responsible for every aspect of that evening. That meant I was constantly moving — setup, timing, catering, guest management. Nothing about my presence in any part of that villa was unusual. That was my job.<br><br>After the cake cutting, things became more chaotic. People were moving, arguing, drifting. I focused on keeping what I could under control.<br><br>I did not personally serve Rohan a drink. There were others helping with distribution. I may have carried a tray at some point during setup — that is part of what I do. But I did not specifically hand anything to him.<br><br>The messages between us — yes, Rohan and I had a complicated dynamic. He had expectations of me that went beyond professional. I had made clear that those expectations were not going to be met. Whatever he was threatening to say — I was managing it. I was not afraid of him. Not the way he wanted me to be."</div>
+    <div class="sl">Extracted Communication — 11 Days, Recovered Thread</div>
+    <div class="chat"><span class="sp">Rohan (Day 1):</span> I need you to handle this personally. No one else.<br><span class="sp">Neha:</span> I'll manage the event the way I manage all events.<br><span class="sp">Rohan (Day 4):</span> I wonder what people would think if they knew about <span class="redact">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>.<br><span class="sp">Neha:</span> Don't.<br><span class="sp">Rohan (Day 9):</span> I've been patient. My patience ends the morning after the party.<br><span class="sp">Neha:</span> You've made your position very clear.<br><span class="sp">Rohan (12:05 AM, night of incident):</span> You know what's at stake. Don't make this harder than it needs to be.<br><span class="sp">Neha (12:06 AM):</span> I understand exactly what I need to do.</div>
+    <div class="sl">Investigator Assessment</div>
+    <div class="row"><div class="dot d-amber"></div><div>Access to service areas is the most unrestricted of any suspect — her presence in preparation zones was expected and would not have registered as suspicious to anyone present</div></div>
+    <div class="row"><div class="dot d-amber"></div><div>The 11:20 PM bag entry into the service corridor remains unexplained — no equipment, no task, no witness account corroborates her explanation</div></div>
+    <div class="row"><div class="dot d-amber"></div><div>The 12:06 AM reply is a double-edged statement: in isolation it could be interpreted as resignation or compliance; in context — immediately before the critical unmonitored window — it reads as something else entirely</div></div>
+    <div class="note-box">⚠ Cross-reference: The redacted content in Rohan's Day 4 message — the specific information he threatened to disclose — is sealed. The nature of that information has direct bearing on the weight of her motive. Investigators should note that legal protections applied at the request of a third party, not Neha herself.</div>
+  </div>
+  <div class="page-footer">
+    <span>CF-209 / INVESTIGATIVE DIVISION</span>
+    <span>RESTRICTED DISTRIBUTION</span>
+    <span>PAGE 9 OF 14</span>
+  </div>
+</div>
+
+</body>
+</html>

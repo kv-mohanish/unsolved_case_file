@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Investigation Analysis</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cf-ink:#2C2C2A;
+  --cf-paper:#F7F5EE;
+  --cf-muted:#888780;
+  --cf-border:#C8C6BB;
+  --cf-red:#993C1D;
+  --cf-red-bg:#FAECE7;
+  --cf-red-deep:#4A1B0C;
+  --cf-amber:#854F0B;
+  --cf-amber-bg:#FAEEDA;
+  --cf-green:#3B6D11;
+  --cf-green-bg:#EAF3DE;
+  --cf-blue:#185FA5;
+  --cf-blue-bg:#E6F1FB;
+}
+
+body{background:#E8E6DF;font-family:'Courier Prime',monospace;color:var(--cf-ink)}
+
+.page{
+  width:210mm;
+  min-height:297mm;
+  background:var(--cf-paper);
+  margin:12mm auto;
+  padding:18mm 18mm 22mm;
+  box-shadow:0 4px 24px rgba(0,0,0,.18);
+  page-break-after:always;
+  position:relative;
+}
+.page:last-child{page-break-after:auto}
+
+@media print{
+  body{background:none}
+  .page{
+    margin:0;
+    box-shadow:none;
+    padding:14mm 16mm 16mm;
+    width:210mm;
+    min-height:297mm;
+    page-break-after:always;
+  }
+  .no-print{display:none!important}
+}
+
+.pg-num{font-size:10px;color:var(--cf-muted);text-align:right;margin-bottom:.4rem;letter-spacing:.08em;font-family:'Courier Prime',monospace}
+.body{font-size:12.5px;line-height:1.9;color:var(--cf-ink)}
+.italic{font-style:italic;color:var(--cf-muted)}
+
+.sl{font-size:10px;letter-spacing:.15em;color:var(--cf-muted);text-transform:uppercase;border-bottom:.5px solid var(--cf-border);padding-bottom:4px;margin:1rem 0 .55rem;font-family:'Courier Prime',monospace}
+
+.stamp{display:inline-flex;align-items:center;border:2.5px solid var(--cf-red);color:var(--cf-red);font-family:'Special Elite',serif;font-size:11px;letter-spacing:.18em;padding:3px 11px 4px;transform:rotate(-2.2deg);margin-bottom:.9rem;opacity:.82;text-transform:uppercase}
+.stamp.blue{border-color:var(--cf-blue);color:var(--cf-blue);transform:rotate(1.3deg)}
+.stamp.green{border-color:var(--cf-green);color:var(--cf-green);transform:rotate(-1deg)}
+
+.classified-bar{background:var(--cf-red);color:#FAECE7;font-family:'Special Elite',serif;font-size:10px;letter-spacing:.2em;text-align:center;padding:4px 0;margin-bottom:1rem;border-radius:2px}
+
+.header-box{border:.5px solid var(--cf-border);border-radius:4px;padding:1rem 1.25rem;margin-bottom:1.1rem;background:#FDFCF7}
+.case-id{font-family:'Special Elite',serif;font-size:20px;letter-spacing:.1em}
+.case-sub{font-family:'Special Elite',serif;font-size:13px;color:var(--cf-muted);margin-top:2px;letter-spacing:.05em}
+.meta-row{display:flex;flex-wrap:wrap;gap:1rem;margin-top:.65rem}
+.meta{font-size:11px;color:var(--cf-muted)}.meta strong{display:block;font-size:12px;font-weight:700;color:var(--cf-ink);margin-bottom:1px}
+
+.row{display:flex;gap:9px;align-items:flex-start;padding:6px 0;border-bottom:.5px solid var(--cf-border);font-size:12.5px}
+.row:last-child{border-bottom:none}
+.dot{width:7px;height:7px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.d-red{background:#993C1D}.d-amber{background:#BA7517}.d-green{background:#3B6D11}
+
+.epigraph{font-family:'Special Elite',serif;font-size:13.5px;color:var(--cf-muted);border-left:3px solid var(--cf-border);padding-left:.9rem;margin:1rem 0;font-style:italic}
+
+.tbl{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:.4rem}
+.tbl th{text-align:left;padding:5px 8px;font-size:10px;letter-spacing:.09em;color:var(--cf-muted);border-bottom:.5px solid var(--cf-border);font-weight:500}
+.tbl td{padding:7px 8px;border-bottom:.5px solid var(--cf-border);vertical-align:top;color:var(--cf-ink)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl .crit td{background:var(--cf-red-bg);color:var(--cf-red-deep)}
+
+.badge{display:inline-block;font-size:9.5px;padding:2px 6px;border-radius:2px;letter-spacing:.04em}
+.b-red{background:var(--cf-red-bg);color:var(--cf-red)}.b-amber{background:var(--cf-amber-bg);color:var(--cf-amber)}.b-green{background:var(--cf-green-bg);color:var(--cf-green)}.b-blue{background:var(--cf-blue-bg);color:var(--cf-blue)}
+
+.s-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:.5rem}
+.s-card{border:.5px solid var(--cf-border);border-radius:4px;padding:.6rem .5rem;background:#FDFCF7;text-align:center}
+.initials{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;margin:0 auto 6px}
+.s-name{font-size:12px;font-weight:500;color:var(--cf-ink)}.s-role{font-size:10px;color:var(--cf-muted);margin-top:1px}
+.s-status{font-size:9.5px;margin-top:4px;padding:2px 7px;border-radius:2px;display:inline-block;letter-spacing:.03em}
+
+.chat{background:#F2EFE8;border:.5px solid var(--cf-border);border-radius:4px;padding:.6rem .9rem;font-family:'Courier Prime',monospace;font-size:11.5px;line-height:1.9;margin-top:.4rem;color:var(--cf-muted)}
+.chat .sp{font-weight:700;color:var(--cf-ink)}.chat .hot{color:var(--cf-red)}
+
+.contra{display:inline-block;background:#FCEBEB;border:.5px solid #E24B4A;border-radius:2px;color:#501313;font-size:9.5px;padding:2px 7px;margin-top:3px;letter-spacing:.04em}
+
+.ev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:.5rem}
+.ev-card{border:.5px solid var(--cf-border);border-radius:4px;padding:.65rem;background:#FDFCF7}
+.ev-tag{font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:3px;color:var(--cf-ink)}
+.ev-desc{font-size:11px;color:var(--cf-muted);line-height:1.5}
+.ev-status{font-size:9.5px;margin-top:4px}
+
+.warn-note{background:var(--cf-amber-bg);border:.5px solid #EF9F27;border-radius:4px;padding:.5rem .9rem;font-size:11.5px;color:#412402;margin-top:.7rem}
+
+.verdict-box{border:2px solid var(--cf-red);border-radius:4px;padding:1rem 1.25rem;margin-top:.9rem;background:var(--cf-red-bg)}
+.verdict-title{font-family:'Special Elite',serif;font-size:15px;color:var(--cf-red-deep);margin-bottom:.6rem;letter-spacing:.05em}
+.v-row{display:flex;gap:9px;font-size:12px;padding:5px 0;color:var(--cf-red-deep);border-bottom:.5px solid #F0997B}
+.v-row:last-child{border-bottom:none}.v-key{font-weight:700;min-width:90px;flex-shrink:0}
+
+.fingerprint-chip{display:inline-flex;align-items:center;gap:5px;background:var(--cf-red-bg);border:.5px solid var(--cf-red);border-radius:2px;padding:3px 9px;font-size:10.5px;color:var(--cf-red);letter-spacing:.04em;margin-top:3px}
+
+.timeline-connector{display:flex;flex-direction:column;gap:0}
+.tl-row{display:flex;gap:0;align-items:stretch}
+.tl-dot-col{display:flex;flex-direction:column;align-items:center;width:20px;flex-shrink:0}
+.tl-dot2{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:9px}
+.tl-line{width:1.5px;background:var(--cf-border);flex:1;min-height:8px}
+.tl-content{padding:5px 0 10px 9px;font-size:12.5px;color:var(--cf-ink);flex:1}
+.tl-time{font-family:'Special Elite',serif;font-size:12px;color:var(--cf-muted);display:block;margin-bottom:1px}
+.tl-event{line-height:1.55}
+.tl-sub{font-size:10.5px;color:var(--cf-muted);margin-top:2px}
+
+.redact{display:inline-block;background:var(--cf-ink);color:transparent;border-radius:2px;user-select:none}
+
+.suspect-detail{border:.5px solid var(--cf-border);border-radius:4px;padding:1rem 1.25rem;margin-bottom:1.2rem;background:#FDFCF7;page-break-inside:avoid}
+.detail-title{font-family:'Special Elite',serif;font-size:14px;color:var(--cf-ink)}
+.divider{border:none;border-top:.5px solid var(--cf-border);margin:.7rem 0}
+
+.page-footer{position:absolute;bottom:10mm;left:18mm;right:18mm;display:flex;justify-content:space-between;font-size:9px;color:var(--cf-muted);letter-spacing:.07em;border-top:.5px solid var(--cf-border);padding-top:4px}
+
+.print-bar{text-align:center;padding:10px;font-family:'Courier Prime',monospace}
+.print-btn{padding:9px 24px;font-family:'Courier Prime',monospace;font-size:13px;border:1.5px solid var(--cf-ink);border-radius:3px;background:var(--cf-ink);color:var(--cf-paper);cursor:pointer;letter-spacing:.07em}
+.print-btn:hover{background:#444}
+
+.note-box{background:var(--cf-blue-bg);border:.5px solid var(--cf-blue);border-radius:4px;padding:.6rem .9rem;font-size:11.5px;color:#0D3A6A;margin-top:.7rem;line-height:1.7}
+.redherring{background:#F5EAF7;border:.5px solid #9B4CB5;border-radius:4px;padding:.5rem .9rem;font-size:11px;color:#3C1050;margin-top:.5rem;line-height:1.65}
+.cross-ref{font-size:10px;color:var(--cf-muted);letter-spacing:.05em;margin-top:4px;font-style:italic}
+</style>
+</head>
+<body>
+    <!-- PAGE 13 — INVESTIGATION ANALYSIS -->
+<div class="page">
+  <div class="pg-num">CF-209 — Page 13 of 14</div>
+  <div class="stamp blue">Investigation Analysis</div>
+  <div class="sl">Primary Questions for Investigation</div>
+  <div class="row"><div class="dot d-red"></div><div><strong>Who committed the crime?</strong> — Identify the perpetrator and establish the convergence of motive, means, and opportunity that places them above all other suspects. A partial case is not a conviction.</div></div>
+  <div class="row"><div class="dot d-amber"></div><div><strong>How was it executed?</strong> — Reconstruct the precise sequence: acquisition of compound, preparation, the specific moment of administration, and the method used to avoid detection in a room full of people.</div></div>
+  <div class="row"><div class="dot d-amber"></div><div><strong>Why that night?</strong> — The timing is not incidental. The act was triggered by a specific, fixed deadline. Identify what that deadline was and which suspect faced it most acutely.</div></div>
+  <div class="row"><div class="dot d-amber"></div><div><strong>What are the others hiding?</strong> — Not every lie is a murder. Determine which suspects are concealing guilt and which are concealing something else — embarrassment, complicity, or something they witnessed but have not disclosed.</div></div>
+  <div class="sl">Suspect Comparison Matrix</div>
+  <div style="overflow-x:auto;margin-top:.4rem">
+    <table class="tbl">
+      <thead><tr><th>Suspect</th><th>Motive</th><th>Means (Compound Access)</th><th>Opportunity (12:20–12:30)</th><th>Physical Evidence</th><th>Alibi Status</th><th>Statement Truth</th></tr></thead>
+      <tbody>
+        <tr><td>Aisha</td><td><span class="badge b-amber">Protective — for another</span></td><td><span class="badge b-amber">Unknown</span></td><td><span class="badge b-red">Unverified gap</span></td><td><span class="badge b-green">None recovered</span></td><td><span class="badge b-amber">Gap unexplained</span></td><td><span class="badge b-amber">Partially incomplete</span></td></tr>
+        <tr><td>Kabir</td><td><span class="badge b-red">Financial — concrete loss</span></td><td><span class="badge b-amber">Unknown</span></td><td><span class="badge b-red">Disputed — placed inside</span></td><td><span class="badge b-amber">Area compromised</span></td><td><span class="badge b-red">Directly contradicted</span></td><td><span class="badge b-red">Material falsehood</span></td></tr>
+        <tr><td>Megha</td><td><span class="badge b-red">Emotional + threatened</span></td><td><span class="badge b-amber">Unknown</span></td><td><span class="badge b-amber">Unverified — near corridor</span></td><td><span class="badge b-green">None recovered</span></td><td><span class="badge b-amber">Depends on Aisha</span></td><td><span class="badge b-amber">Omissions present</span></td></tr>
+        <tr><td>Arjun</td><td><span class="badge b-amber">Professional + sealed threat</span></td><td><span class="badge b-amber">Unknown</span></td><td><span class="badge b-red">Re-entry confirmed — wrong direction</span></td><td><span class="badge b-green">None recovered</span></td><td><span class="badge b-red">Directional discrepancy</span></td><td><span class="badge b-red">Incomplete — 12:19 call unexplained</span></td></tr>
+        <tr><td>Neha</td><td><span class="badge b-red">Blackmail — existential</span></td><td><span class="badge b-red">Service corridor — unexplained item</span></td><td><span class="badge b-red">Photo evidence — contested</span></td><td><span class="badge b-red">Fingerprint pending</span></td><td><span class="badge b-amber">Composed — no alibi for gap</span></td><td><span class="badge b-red">Material omissions</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="sl">Key Contradictions to Resolve</div>
+  <div class="row"><div class="dot d-red"></div><div>Kabir's stated departure at 12:30 AM is directly contradicted by a witness placing him inside the villa near the bar area after the power was restored — at the same time the drinks were being distributed</div></div>
+  <div class="row"><div class="dot d-red"></div><div>The fingerprint on the victim's glass belongs to someone present that night — when it is matched, it places that person in direct contact with the murder weapon. The match is pending. This is the single most determinative piece of physical evidence in the file.</div></div>
+  <div class="row"><div class="dot d-red"></div><div>Neha's 12:06 AM reply — "I understand exactly what I need to do" — was sent minutes before the unmonitored gap, after an explicit threat about morning disclosure. The compound was non-trivially acquired. The service corridor at 11:20 PM contained an unidentified item. The 12:32 AM photograph shows a figure near the drinks tray. These four data points are either a coincidence or a chain.</div></div>
+  <div class="row"><div class="dot d-amber"></div><div>Arjun's re-entry into the villa is confirmed — but his stated direction (toward coats) is contradicted by witness-placed direction (toward main hall). The 11-second call to a now-disconnected prepaid device at 12:19 AM — one minute before the outage — remains entirely unexplained.</div></div>
+  <div class="row"><div class="dot d-amber"></div><div>Megha's kitchen corridor presence, the prior message "I've already done what I needed to do," and the publicly issued threat form a pattern — but the absence of physical evidence and her reliance on a provably imperfect alibi do not on their own establish guilt</div></div>
+  <div class="warn-note">The matrix above is a working instrument, not a verdict. Each assessment is based on the evidence available at the time of filing. Investigators must establish which contradictions are criminal concealment and which are incidental omissions. No single data point is sufficient. The case turns on the convergence of motive, means, and the specific window of 12:20–12:35 AM.</div>
+  <div class="page-footer">
+    <span>CF-209 / INVESTIGATIVE DIVISION</span>
+    <span>RESTRICTED DISTRIBUTION</span>
+    <span>PAGE 13 OF 14</span>
+  </div>
+</div>
+</body>
+</html>

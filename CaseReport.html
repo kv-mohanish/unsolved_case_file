@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Report</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cf-ink:#2C2C2A;
+  --cf-paper:#F7F5EE;
+  --cf-muted:#888780;
+  --cf-border:#C8C6BB;
+  --cf-red:#993C1D;
+  --cf-red-bg:#FAECE7;
+  --cf-red-deep:#4A1B0C;
+  --cf-amber:#854F0B;
+  --cf-amber-bg:#FAEEDA;
+  --cf-green:#3B6D11;
+  --cf-green-bg:#EAF3DE;
+  --cf-blue:#185FA5;
+  --cf-blue-bg:#E6F1FB;
+}
+
+body{background:#E8E6DF;font-family:'Courier Prime',monospace;color:var(--cf-ink)}
+
+.page{
+  width:210mm;
+  min-height:297mm;
+  background:var(--cf-paper);
+  margin:12mm auto;
+  padding:18mm 18mm 22mm;
+  box-shadow:0 4px 24px rgba(0,0,0,.18);
+  page-break-after:always;
+  position:relative;
+}
+.page:last-child{page-break-after:auto}
+
+@media print{
+  body{background:none}
+  .page{
+    margin:0;
+    box-shadow:none;
+    padding:14mm 16mm 16mm;
+    width:210mm;
+    min-height:297mm;
+    page-break-after:always;
+  }
+  .no-print{display:none!important}
+}
+
+.pg-num{font-size:10px;color:var(--cf-muted);text-align:right;margin-bottom:.4rem;letter-spacing:.08em;font-family:'Courier Prime',monospace}
+.body{font-size:12.5px;line-height:1.9;color:var(--cf-ink)}
+.italic{font-style:italic;color:var(--cf-muted)}
+
+.sl{font-size:10px;letter-spacing:.15em;color:var(--cf-muted);text-transform:uppercase;border-bottom:.5px solid var(--cf-border);padding-bottom:4px;margin:1rem 0 .55rem;font-family:'Courier Prime',monospace}
+
+.stamp{display:inline-flex;align-items:center;border:2.5px solid var(--cf-red);color:var(--cf-red);font-family:'Special Elite',serif;font-size:11px;letter-spacing:.18em;padding:3px 11px 4px;transform:rotate(-2.2deg);margin-bottom:.9rem;opacity:.82;text-transform:uppercase}
+.stamp.blue{border-color:var(--cf-blue);color:var(--cf-blue);transform:rotate(1.3deg)}
+.stamp.green{border-color:var(--cf-green);color:var(--cf-green);transform:rotate(-1deg)}
+
+.classified-bar{background:var(--cf-red);color:#FAECE7;font-family:'Special Elite',serif;font-size:10px;letter-spacing:.2em;text-align:center;padding:4px 0;margin-bottom:1rem;border-radius:2px}
+
+.header-box{border:.5px solid var(--cf-border);border-radius:4px;padding:1rem 1.25rem;margin-bottom:1.1rem;background:#FDFCF7}
+.case-id{font-family:'Special Elite',serif;font-size:20px;letter-spacing:.1em}
+.case-sub{font-family:'Special Elite',serif;font-size:13px;color:var(--cf-muted);margin-top:2px;letter-spacing:.05em}
+.meta-row{display:flex;flex-wrap:wrap;gap:1rem;margin-top:.65rem}
+.meta{font-size:11px;color:var(--cf-muted)}.meta strong{display:block;font-size:12px;font-weight:700;color:var(--cf-ink);margin-bottom:1px}
+
+.row{display:flex;gap:9px;align-items:flex-start;padding:6px 0;border-bottom:.5px solid var(--cf-border);font-size:12.5px}
+.row:last-child{border-bottom:none}
+.dot{width:7px;height:7px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.d-red{background:#993C1D}.d-amber{background:#BA7517}.d-green{background:#3B6D11}
+
+.epigraph{font-family:'Special Elite',serif;font-size:13.5px;color:var(--cf-muted);border-left:3px solid var(--cf-border);padding-left:.9rem;margin:1rem 0;font-style:italic}
+
+.tbl{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:.4rem}
+.tbl th{text-align:left;padding:5px 8px;font-size:10px;letter-spacing:.09em;color:var(--cf-muted);border-bottom:.5px solid var(--cf-border);font-weight:500}
+.tbl td{padding:7px 8px;border-bottom:.5px solid var(--cf-border);vertical-align:top;color:var(--cf-ink)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl .crit td{background:var(--cf-red-bg);color:var(--cf-red-deep)}
+
+.badge{display:inline-block;font-size:9.5px;padding:2px 6px;border-radius:2px;letter-spacing:.04em}
+.b-red{background:var(--cf-red-bg);color:var(--cf-red)}.b-amber{background:var(--cf-amber-bg);color:var(--cf-amber)}.b-green{background:var(--cf-green-bg);color:var(--cf-green)}.b-blue{background:var(--cf-blue-bg);color:var(--cf-blue)}
+
+.s-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:.5rem}
+.s-card{border:.5px solid var(--cf-border);border-radius:4px;padding:.6rem .5rem;background:#FDFCF7;text-align:center}
+.initials{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;margin:0 auto 6px}
+.s-name{font-size:12px;font-weight:500;color:var(--cf-ink)}.s-role{font-size:10px;color:var(--cf-muted);margin-top:1px}
+.s-status{font-size:9.5px;margin-top:4px;padding:2px 7px;border-radius:2px;display:inline-block;letter-spacing:.03em}
+
+.chat{background:#F2EFE8;border:.5px solid var(--cf-border);border-radius:4px;padding:.6rem .9rem;font-family:'Courier Prime',monospace;font-size:11.5px;line-height:1.9;margin-top:.4rem;color:var(--cf-muted)}
+.chat .sp{font-weight:700;color:var(--cf-ink)}.chat .hot{color:var(--cf-red)}
+
+.contra{display:inline-block;background:#FCEBEB;border:.5px solid #E24B4A;border-radius:2px;color:#501313;font-size:9.5px;padding:2px 7px;margin-top:3px;letter-spacing:.04em}
+
+.ev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:.5rem}
+.ev-card{border:.5px solid var(--cf-border);border-radius:4px;padding:.65rem;background:#FDFCF7}
+.ev-tag{font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:3px;color:var(--cf-ink)}
+.ev-desc{font-size:11px;color:var(--cf-muted);line-height:1.5}
+.ev-status{font-size:9.5px;margin-top:4px}
+
+.warn-note{background:var(--cf-amber-bg);border:.5px solid #EF9F27;border-radius:4px;padding:.5rem .9rem;font-size:11.5px;color:#412402;margin-top:.7rem}
+
+.verdict-box{border:2px solid var(--cf-red);border-radius:4px;padding:1rem 1.25rem;margin-top:.9rem;background:var(--cf-red-bg)}
+.verdict-title{font-family:'Special Elite',serif;font-size:15px;color:var(--cf-red-deep);margin-bottom:.6rem;letter-spacing:.05em}
+.v-row{display:flex;gap:9px;font-size:12px;padding:5px 0;color:var(--cf-red-deep);border-bottom:.5px solid #F0997B}
+.v-row:last-child{border-bottom:none}.v-key{font-weight:700;min-width:90px;flex-shrink:0}
+
+.fingerprint-chip{display:inline-flex;align-items:center;gap:5px;background:var(--cf-red-bg);border:.5px solid var(--cf-red);border-radius:2px;padding:3px 9px;font-size:10.5px;color:var(--cf-red);letter-spacing:.04em;margin-top:3px}
+
+.timeline-connector{display:flex;flex-direction:column;gap:0}
+.tl-row{display:flex;gap:0;align-items:stretch}
+.tl-dot-col{display:flex;flex-direction:column;align-items:center;width:20px;flex-shrink:0}
+.tl-dot2{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:9px}
+.tl-line{width:1.5px;background:var(--cf-border);flex:1;min-height:8px}
+.tl-content{padding:5px 0 10px 9px;font-size:12.5px;color:var(--cf-ink);flex:1}
+.tl-time{font-family:'Special Elite',serif;font-size:12px;color:var(--cf-muted);display:block;margin-bottom:1px}
+.tl-event{line-height:1.55}
+.tl-sub{font-size:10.5px;color:var(--cf-muted);margin-top:2px}
+
+.redact{display:inline-block;background:var(--cf-ink);color:transparent;border-radius:2px;user-select:none}
+
+.suspect-detail{border:.5px solid var(--cf-border);border-radius:4px;padding:1rem 1.25rem;margin-bottom:1.2rem;background:#FDFCF7;page-break-inside:avoid}
+.detail-title{font-family:'Special Elite',serif;font-size:14px;color:var(--cf-ink)}
+.divider{border:none;border-top:.5px solid var(--cf-border);margin:.7rem 0}
+
+.page-footer{position:absolute;bottom:10mm;left:18mm;right:18mm;display:flex;justify-content:space-between;font-size:9px;color:var(--cf-muted);letter-spacing:.07em;border-top:.5px solid var(--cf-border);padding-top:4px}
+
+.print-bar{text-align:center;padding:10px;font-family:'Courier Prime',monospace}
+.print-btn{padding:9px 24px;font-family:'Courier Prime',monospace;font-size:13px;border:1.5px solid var(--cf-ink);border-radius:3px;background:var(--cf-ink);color:var(--cf-paper);cursor:pointer;letter-spacing:.07em}
+.print-btn:hover{background:#444}
+
+.note-box{background:var(--cf-blue-bg);border:.5px solid var(--cf-blue);border-radius:4px;padding:.6rem .9rem;font-size:11.5px;color:#0D3A6A;margin-top:.7rem;line-height:1.7}
+.redherring{background:#F5EAF7;border:.5px solid #9B4CB5;border-radius:4px;padding:.5rem .9rem;font-size:11px;color:#3C1050;margin-top:.5rem;line-height:1.65}
+.cross-ref{font-size:10px;color:var(--cf-muted);letter-spacing:.05em;margin-top:4px;font-style:italic}
+</style>
+</head>
+<body>
+    <!-- PAGE 1 — COVER -->
+<div class="page">
+  <div class="pg-num">CF-209 — Page 1 of 14</div>
+  <div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;margin-bottom:.7rem">
+    <div class="stamp">Reopened</div>
+    <div class="stamp blue">Homicide</div>
+  </div>
+  <div class="classified-bar">CASE FILE — INVESTIGATIVE DIVISION — RESTRICTED DISTRIBUTION</div>
+  <div class="header-box">
+    <div class="case-id">CF-209</div>
+    <div class="case-sub">The Night That Never Ended</div>
+    <div class="meta-row">
+      <div class="meta"><strong>Victim</strong>Rohan Verma, 22</div>
+      <div class="meta"><strong>Location</strong>Wisteria Villa, Off-Campus Outskirts</div>
+      <div class="meta"><strong>Incident Date</strong>14th–15th March</div>
+      <div class="meta"><strong>Cause of Death</strong>Toxic Ingestion — Confirmed Homicide</div>
+      <div class="meta"><strong>Case Status</strong>Reopened — Active Investigation</div>
+      <div class="meta"><strong>Lead Investigator</strong><span class="redact">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+    </div>
+  </div>
+  <div class="epigraph">"Five people entered that villa that night with secrets. Only one left with blood on their hands — but all of them are lying about something."</div>
+  <div class="sl">File Contents</div>
+  <div class="body">This investigative file contains sensitive material compiled following the formal reclassification of case CF-209. Investigators will find: a full case summary, extended victim background, reconstructed timeline, detailed suspect profiles with extracted communications, forensic analysis, physical and digital evidence logs, witness cross-reference notes, and a suspect comparison matrix.<br><br>The case was originally filed as <em>Accidental / Undetermined</em>. Following secondary forensic review and digital extraction, six critical inconsistencies were identified. The case has since been reclassified as <strong>Confirmed Homicide — Deliberate Toxic Ingestion.</strong><br><br>All five suspects had documented grievances with the victim. All five have provided statements containing verifiable gaps or contradictions. Investigators must establish which gaps are incidental and which are deliberate concealment.<br><br><strong>Estimated investigation time: 50–60 minutes.</strong> Do not skip the cross-reference notes. Evidence on one page frequently contradicts a statement on another.</div>
+  <div class="warn-note">This file is for internal use only. The Confidential page (Page 14) is restricted to event organisers and must not be distributed to investigators.</div>
+  <div class="page-footer">
+    <span>CF-209 / INVESTIGATIVE DIVISION</span>
+    <span>RESTRICTED DISTRIBUTION</span>
+    <span>PAGE 1 OF 14</span>
+  </div>
+</div>
+
+<!-- PAGE 2 — CASE SUMMARY (EXTENDED) -->
+<div class="page">
+  <div class="pg-num">CF-209 — Page 2 of 14</div>
+  <div class="stamp blue">Case Summary</div>
+  <div class="sl">Overview</div>
+  <div class="body">On the night of 14th March, Rohan Verma hosted a private end-of-semester gathering at Wisteria Villa — a rented off-campus property chosen for its isolation from the main college campus. The invitation list was small and deliberate: five people who shared varying degrees of proximity to Rohan — some by friendship, some by professional dependency, and at least one, it is now suspected, by fear.<br><br>What was presented as a celebration concealed an environment of escalating pressure. In the 72 hours prior to the event, Rohan had sent a series of threatening communications to multiple individuals within the group. The content of these messages, now partially recovered, makes clear that he intended to use private information — gathered over months — as leverage. For at least one recipient, the threat was existential. The party was not merely a gathering. For someone in that room, it was a deadline.</div>
+  <div class="sl">The Atmosphere That Night</div>
+  <div class="body">Attendees who arrived early describe the first hour as deceptively ordinary. Music was playing. Drinks were being served. Conversations were surface-level. But those present note that Rohan was agitated in a way they hadn't seen before — distracted, checking his phone repeatedly, and at one point stepping outside alone for nearly fifteen minutes.<br><br>At 11:45 PM, that veneer collapsed. A confrontation between Rohan and Megha — his former girlfriend — escalated into a full public argument. Multiple attendees describe Rohan as "cruel" and "calculated" in his delivery, as though the argument had been prepared in advance. Megha's response was audibly threatening. The group fractured. Some moved outside. Some retreated to corners. The atmosphere, according to one account, "felt like a fuse had been lit."<br><br>It was in this charged context — fractured attention, scattered positions, rising hostility — that the killing took place.</div>
+  <div class="sl">Incident Reconstruction</div>
+  <div class="row"><div class="dot d-amber"></div><div><strong>10:30 PM —</strong> Gathering begins. All five suspects arrive within a 40-minute window. Initial atmosphere described as relaxed. Rohan reportedly greets each guest privately before the group assembles.</div></div>
+  <div class="row"><div class="dot d-amber"></div><div><strong>11:00 PM —</strong> Kabir and Rohan are observed in a private conversation near the rear terrace. Witnesses describe the exchange as "tense." Both deny a confrontation occurred at this time.</div></div>
+  <div class="row"><div class="dot d-amber"></div><div><strong>11:45 PM —</strong> Public argument erupts between Rohan and Megha. Overheard by all attendees. Rohan references specific private information — the nature of which witnesses decline to name. Megha makes an audible threat: "You'll regret this." Multiple guests deliberately withdraw.</div></div>
+  <div class="row"><div class="dot d-green"></div><div><strong>12:00 AM —</strong> Group reassembles for cake cutting. All five suspects confirmed present by photographic evidence. Rohan is described as visibly relaxed at this moment — "as if the argument hadn't happened."</div></div>
+  <div class="row"><div class="dot d-red"></div><div><strong>12:05 AM —</strong> A threatening message is sent from Rohan's device to a suspect. The message references exposing sensitive personal information "first thing tomorrow morning." A reply is received from another device at 12:06 AM. Both messages were subsequently deleted and later recovered via forensic extraction.</div></div>
+  <div class="row"><div class="dot d-red"></div><div><strong>12:20 AM —</strong> <strong>Power outage.</strong> Duration: approximately 6–7 minutes. All indoor surveillance, ambient lighting, and the villa's CCTV system are taken offline. Individual positions are entirely unverified during this window. One witness reports hearing movement near the service corridor. Another reports seeing a figure re-enter from the parking area as lights returned.</div></div>
+  <div class="row"><div class="dot d-red"></div><div><strong>12:30 AM —</strong> <strong>Drinks distributed.</strong> A photograph timestamped 12:32 AM documents an individual near the drinks tray in the main hall. The identity of that individual is contested. Forensic analysis later confirms a toxic substance was introduced into the victim's glass at or around this time.</div></div>
+  <div class="row"><div class="dot d-amber"></div><div><strong>1:00 AM —</strong> Several guests begin to depart. Rohan is seen by two individuals — accounts of his condition at this point differ significantly. One describes him as "quieter than usual." The other describes him as "totally fine."</div></div>
+  <div class="row"><div class="dot d-amber"></div><div><strong>1:15 AM —</strong> Last confirmed sighting of the victim — observed alone in the main hall by a single witness. No further verified interactions established.</div></div>
+  <div class="row"><div class="dot d-red"></div><div><strong>2:10 AM —</strong> Rohan Verma discovered unconscious in his private bedroom. No external injuries. No signs of forced entry. No evidence of a struggle. Emergency services contacted. Cause of death reclassified to homicide following toxicology.</div></div>
+  <div class="warn-note">The 12:20–12:30 AM window is the primary interval of interest. No suspect has provided an account that is both internally consistent and independently corroborated during this period.</div>
+  <div class="page-footer">
+    <span>CF-209 / INVESTIGATIVE DIVISION</span>
+    <span>RESTRICTED DISTRIBUTION</span>
+    <span>PAGE 2 OF 14</span>
+  </div>
+</div>
+
+<!-- PAGE 3 — VICTIM PROFILE (EXTENDED) -->
+<div class="page">
+  <div class="pg-num">CF-209 — Page 3 of 14</div>
+  <div class="stamp">Victim Profile</div>
+  <div class="header-box">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="initials" style="width:46px;height:46px;background:#D3D1C7;color:#2C2C2A;font-size:15px">RV</div>
+      <div>
+        <div style="font-family:'Special Elite',serif;font-size:17px">Rohan Verma</div>
+        <div style="font-size:11px;color:var(--cf-muted);margin-top:2px">Age 22 — Final Year, Business Administration — Deceased</div>
+      </div>
+    </div>
+    <div class="meta-row" style="margin-top:.75rem">
+      <div class="meta"><strong>Programme</strong>Business Administration</div>
+      <div class="meta"><strong>Status</strong>Final Semester — Pending Degree</div>
+      <div class="meta"><strong>Social Role</strong>Informal group leader; networker</div>
+      <div class="meta"><strong>Known Associates</strong>All five suspects; several unnamed peripherals</div>
+    </div>
+  </div>
+  <div class="sl">Personal Background</div>
+  <div class="body">Rohan Verma occupied a position of disproportionate informal authority within his immediate social and academic network. He was widely regarded as charismatic and perceptive — a person who understood what others wanted and was willing to exploit that knowledge. Peers describe him as "strategically charming": warm when he needed something, cold when he didn't. In the months before his death, that balance had shifted decisively toward the latter.<br><br>Rohan had, over the course of his final year, assembled what can only be described as a private ledger of personal information on the people closest to him. The method of collection is unclear — but the pattern is documented. He gathered private disclosures shared in confidence, financial irregularities, romantic indiscretions, and professional failures — each held as potential leverage. His behaviour in the weeks before the gathering had escalated from subtle pressure to explicit threat.</div>
+  <div class="sl">Documented Behavioural Patterns</div>
+  <div class="row"><div class="dot d-red"></div><div>Ongoing communication pattern consistent with blackmail — threatening to expose sensitive personal material unless specific demands were met; documented across multiple recipients within the same social group</div></div>
+  <div class="row"><div class="dot d-red"></div><div>At least three separate threatening communications issued in the 72 hours before the gathering — each to a different individual; each referencing a different piece of private information</div></div>
+  <div class="row"><div class="dot d-red"></div><div>Used social gatherings as environments for control — settings where witnesses were present prevented targets from reacting visibly, giving him a tactical advantage</div></div>
+  <div class="row"><div class="dot d-amber"></div><div>Professional interference documented in at least two cases — used back-channel influence to redirect academic and career opportunities away from associates he wanted to keep dependent on him</div></div>
+  <div class="row"><div class="dot d-amber"></div><div>In at least one case, had knowledge of a matter that, if disclosed, would have had legal — not merely reputational — consequences for the recipient</div></div>
+  <div class="sl">The Information He Held</div>
+  <div class="body">The precise nature of the information Rohan possessed about each individual has not been fully established. What is known — from partially recovered digital records and corroborating accounts — is that each of the five individuals present that night had a documented or strongly implied reason to fear disclosure. The motive pool is wide. The killer's identity is not determined by who had a reason to act — almost everyone did. It is determined by who had the means, the access, and the specific pressure applied that night.</div>
+  <div class="sl">Last Confirmed Status</div>
+  <div class="body">Last confirmed interaction: approximately 12:30 AM, during the drink distribution phase. No verified contact with any individual established after this point. Discovered unconscious at 2:10 AM in his private bedroom. Toxicology confirms ingestion of a controlled toxic compound — concentration consistent with a lethal deliberate dose administered via his drink.</div>
+  <div class="page-footer">
+    <span>CF-209 / INVESTIGATIVE DIVISION</span>
+    <span>RESTRICTED DISTRIBUTION</span>
+    <span>PAGE 3 OF 14</span>
+  </div>
+</div>
+
+<!-- PAGE 4 — TIMELINE (DETAILED) -->
+<div class="page">
+  <div class="pg-num">CF-209 — Page 4 of 14</div>
+  <div class="stamp blue">Detailed Timeline</div>
+  <div class="sl">Reconstructed Chronology — 14th–15th March</div>
+  <div class="timeline-connector" style="margin-top:.5rem">
+    <div class="tl-row">
+      <div class="tl-dot-col"><div class="tl-dot2 d-green"></div><div class="tl-line"></div></div>
+      <div class="tl-content"><span class="tl-time">10:30 PM</span><span class="tl-event">Party begins. All five suspects arrive within 40 minutes. Rohan greets each guest privately at the door — brief, one-on-one. At least two attendees describe these greetings as "unusual" or "like a warning."</span><div class="tl-sub"><span class="badge b-green">Confirmed — multiple accounts</span></div></div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-dot-col"><div class="tl-dot2 d-amber"></div><div class="tl-line"></div></div>
+      <div class="tl-content"><span class="tl-time">11:00 PM</span><span class="tl-event">Kabir and Rohan observed in private conversation near the rear terrace. Duration estimated 15 minutes. Both parties exit with altered demeanour. Kabir described as visibly shaken. Rohan described as "satisfied."</span><div class="tl-sub"><span class="badge b-amber">Two independent witnesses — partially corroborated</span></div></div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-dot-col"><div class="tl-dot2 d-amber"></div><div class="tl-line"></div></div>
+      <div class="tl-content"><span class="tl-time">11:20 PM</span><span class="tl-event">Neha observed entering the service corridor — the area adjacent to the catering prep station — with an item described as "a bag or case." She exits approximately eight minutes later without the item. She claims she was checking on equipment stored there. This account has not been independently verified.</span><div class="tl-sub"><span class="badge b-amber">Single witness — unverified</span></div></div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-dot-col"><div class="tl-dot2 d-amber"></div><div class="tl-line"></div></div>
+      <div class="tl-content"><span class="tl-time">11:45 PM</span><span class="tl-event">Public argument erupts — Rohan and Megha. Described by all attendees as hostile and deliberate. Rohan is heard referencing a "private matter that everyone will know about soon." Megha responds: "You'll regret this." Group fractures. Aisha moves to Megha's side. Kabir steps outside. Arjun positions himself near the exit. Neha continues managing catering, visibly unaffected.</span><div class="tl-sub"><span class="badge b-amber">Witnessed — all five suspects present</span></div></div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-dot-col"><div class="tl-dot2 d-green"></div><div class="tl-line"></div></div>
+      <div class="tl-content"><span class="tl-time">12:00 AM</span><span class="tl-event">Group reassembles for cake cutting. Photographic evidence confirms all five suspects present. Rohan described as "uncharacteristically relaxed" — behaviour that, in retrospect, witnesses interpret as relief. At least one attendee notes he whispered something to Neha immediately before the photograph was taken.</span><div class="tl-sub"><span class="badge b-green">Photo confirmed — all suspects placed</span></div></div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-dot-col"><div class="tl-dot2 d-red"></div><div class="tl-line"></div></div>
+      <div class="tl-content"><span class="tl-time">12:05 AM</span><span class="tl-event">Threatening message sent from Rohan's device. Specific content: references exposure of damaging private information "first thing tomorrow morning." Recipient identified via metadata but disputed. A reply is sent at 12:06 AM from a second device — wording recovered is: "I understand exactly what I need to do." Both threads subsequently deleted and forensically recovered.</span><div class="tl-sub"><span class="badge b-red">Digital record — recovered via extraction</span></div></div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-dot-col"><div class="tl-dot2 d-red"></div><div class="tl-line"></div></div>
+      <div class="tl-content"><span class="tl-time">12:20 AM</span><span class="tl-event"><strong>Power outage — duration 6–7 minutes.</strong> All indoor lighting, CCTV, and electronic surveillance offline. This is the primary unmonitored gap in the evening. Accounts of individual positions during this window are entirely contradictory. One witness claims to have heard "deliberate, unhurried movement" near the service corridor in the dark. A second witness reports seeing two figures standing near the bar area in near-total darkness — unable to identify either. A third reports hearing the rear terrace door open and close, but cannot say in which direction.</span><div class="tl-sub"><span class="badge b-red">Critical gap — all suspect positions unverified</span></div></div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-dot-col"><div class="tl-dot2 d-red"></div><div class="tl-line"></div></div>
+      <div class="tl-content"><span class="tl-time">12:27 AM</span><span class="tl-event">Lights restored. Multiple witnesses note it takes approximately 3 minutes for guests to reorient and move back into communal spaces. During this transitional window, the drinks tray — already prepared and positioned — is present in the main hall. Its contents during the dark interval are completely unverifiable.</span><div class="tl-sub"><span class="badge b-red">Transitional gap — unmonitored</span></div></div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-dot-col"><div class="tl-dot2 d-red"></div><div class="tl-line"></div></div>
+      <div class="tl-content"><span class="tl-time">12:30 AM</span><span class="tl-event"><strong>Drink distribution begins.</strong> A photograph timestamped 12:32 AM captures a partially visible figure near the drinks tray. The individual's face is obscured — but body language, clothing detail, and hand position are subject to ongoing analysis. This is the confirmed point of lethal intervention. The victim's glass — later confirmed to contain the toxic substance — was distributed during this window.</span><div class="tl-sub"><span class="badge b-red">Primary point of lethal intervention — photo evidence partial</span></div></div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-dot-col"><div class="tl-dot2 d-amber"></div><div class="tl-line"></div></div>
+      <div class="tl-content"><span class="tl-time">12:45 AM – 1:15 AM</span><span class="tl-event">Guests begin to thin out. Accounts from this period are inconsistent — multiple suspects claim to have been with others, but those others do not fully corroborate the claim. Rohan is seen twice during this window — once looking "quiet," once looking "normal." Neither account can be reconciled with the other.</span><div class="tl-sub"><span class="badge b-amber">Partial — multiple conflicting witness accounts</span></div></div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-dot-col"><div class="tl-dot2 d-red"></div></div>
+      <div class="tl-content"><span class="tl-time">2:10 AM</span><span class="tl-event"><strong>Victim discovered unconscious.</strong> Bedroom door was unlocked. No external injuries. No forced entry. No physical altercation. Emergency services called. Toxicology confirms deliberate lethal dose administered via liquid ingestion approximately 90 minutes prior.</span><div class="tl-sub"><span class="badge b-red">Confirmed — scene documented at time of discovery</span></div></div>
+    </div>
+  </div>
+  <div class="warn-note">Investigators: the 12:20–12:30 AM window is entirely unmonitored. Every account covering this period is unverified. At least three statements contain internal contradictions about positions and movements during this interval. Do not accept any alibi for this window without independent corroboration.</div>
+  <div class="page-footer">
+    <span>CF-209 / INVESTIGATIVE DIVISION</span>
+    <span>RESTRICTED DISTRIBUTION</span>
+    <span>PAGE 4 OF 14</span>
+  </div>
+</div>
+</body>
+</html>
